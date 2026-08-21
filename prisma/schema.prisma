@@ -1,0 +1,394 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+// ============================================================
+// Users (Admin)
+// ============================================================
+model User {
+  id            String   @id @default(cuid())
+  email         String   @unique
+  passwordHash  String   @map("password_hash")
+  name          String?
+  avatarUrl     String?  @map("avatar_url")
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+
+  weddings Wedding[]
+
+  @@map("users")
+}
+
+// ============================================================
+// Wedding Projects
+// ============================================================
+model Wedding {
+  id              String   @id @default(cuid())
+  userId          String   @map("user_id")
+  slug            String   @unique
+  title           String?
+  groomName       String   @map("groom_name")
+  brideName       String   @map("bride_name")
+  weddingDate     DateTime? @map("wedding_date")
+  engagementDate  DateTime? @map("engagement_date")
+  ceremonyDate    DateTime? @map("ceremony_date")
+  receptionDate   DateTime? @map("reception_date")
+  story           String?
+  venueName       String?  @map("venue_name")
+  venueAddress    String?  @map("venue_address")
+  venueLat        Float?   @map("venue_lat")
+  venueLng        Float?   @map("venue_lng")
+  coverImage      String?  @map("cover_image")
+  isTemplate      Boolean  @default(false) @map("is_template")
+  galleryEnabled  Boolean  @default(true) @map("gallery_enabled")
+  musicEnabled    Boolean  @default(true) @map("music_enabled")
+  rsvpEnabled     Boolean  @default(true) @map("rsvp_enabled")
+  wishesEnabled   Boolean  @default(true) @map("wishes_enabled")
+  createdAt       DateTime @default(now()) @map("created_at")
+  updatedAt       DateTime @updatedAt @map("updated_at")
+
+  user           User             @relation(fields: [userId], references: [id])
+  timelineEvents TimelineEvent[]
+  giftTrays      GiftTray[]
+  galleryImages  GalleryImage[]
+  musicTracks    MusicTrack[]
+  guests         Guest[]
+  rsvpResponses  RsvpResponse[]
+  wishes         Wish[]
+  checkIns       CheckIn[]
+  vendors        Vendor[]
+  checklistItems ChecklistItem[]
+  budgetItems    BudgetItem[]
+  tables         Table[]
+  moneyGifts     MoneyGift[]
+  paymentConfigs PaymentConfig[]
+
+  @@index([userId])
+  @@map("weddings")
+}
+
+// ============================================================
+// Timeline Events (cho nhiều nghi lễ)
+// ============================================================
+model TimelineEvent {
+  id              String   @id @default(cuid())
+  weddingId       String   @map("wedding_id")
+  eventType       String?  @map("event_type")
+  name            String
+  description     String?
+  eventDate       DateTime? @map("event_date")
+  eventTime       String?  @map("event_time")
+  location        String?
+  outfitDescription String? @map("outfit_description")
+  orderIndex      Int      @default(0) @map("order_index")
+  createdAt       DateTime @default(now()) @map("created_at")
+
+  wedding Wedding @relation(fields: [weddingId], references: [id])
+
+  @@index([weddingId])
+  @@map("timeline_events")
+}
+
+// ============================================================
+// Gift Trays (Mâm quả cho lễ hỏi)
+// ============================================================
+model GiftTray {
+  id          String @id @default(cuid())
+  weddingId   String @map("wedding_id")
+  trayName    String @map("tray_name")
+  description String?
+  quantity    Int    @default(1)
+  imageUrl    String? @map("image_url")
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  wedding Wedding @relation(fields: [weddingId], references: [id])
+
+  @@map("gift_trays")
+}
+
+// ============================================================
+// Galleries
+// ============================================================
+model GalleryImage {
+  id           String   @id @default(cuid())
+  weddingId    String   @map("wedding_id")
+  imageUrl     String   @map("image_url")
+  thumbnailUrl String?  @map("thumbnail_url")
+  caption      String?
+  isVideo      Boolean  @default(false) @map("is_video")
+  videoUrl     String?  @map("video_url")
+  orderIndex   Int      @default(0) @map("order_index")
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  wedding Wedding @relation(fields: [weddingId], references: [id])
+
+  @@index([weddingId])
+  @@map("gallery_images")
+}
+
+// ============================================================
+// Music
+// ============================================================
+model MusicTrack {
+  id        String   @id @default(cuid())
+  weddingId String   @map("wedding_id")
+  title     String
+  artist    String?
+  url       String
+  coverUrl  String?  @map("cover_url")
+  isDefault Boolean  @default(false) @map("is_default")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  wedding Wedding @relation(fields: [weddingId], references: [id])
+
+  @@index([weddingId])
+  @@map("music_tracks")
+}
+
+// ============================================================
+// Guests
+// ============================================================
+model Guest {
+  id                  String    @id @default(cuid())
+  weddingId           String    @map("wedding_id")
+  familySide          String?   @map("family_side")
+  name                String
+  phone               String?
+  email               String?
+  groupName           String?   @map("group_name")
+  inviteCode          String?   @unique @map("invite_code")
+  tableNumber         Int?      @map("table_number")
+  isAttending         Boolean?  @map("is_attending")
+  plusOne             Boolean   @default(false) @map("plus_one")
+  plusOneName         String?   @map("plus_one_name")
+  mealChoice          String?   @map("meal_choice")
+  dietaryRestrictions String?   @map("dietary_restrictions")
+  hasSentInvitation   Boolean   @default(false) @map("has_sent_invitation")
+  invitationSentAt    DateTime? @map("invitation_sent_at")
+  hasOpenedInvitation Boolean  @default(false) @map("has_opened_invitation")
+  openedAt            DateTime? @map("opened_at")
+  rsvpAt              DateTime? @map("rsvp_at")
+  thankYouSent        Boolean   @default(false) @map("thank_you_sent")
+  createdAt           DateTime  @default(now()) @map("created_at")
+  updatedAt           DateTime  @updatedAt @map("updated_at")
+
+  wedding Wedding @relation(fields: [weddingId], references: [id])
+  rsvpResponses RsvpResponse[]
+  checkIns      CheckIn[]
+
+  @@index([weddingId])
+  @@index([weddingId, isAttending])
+  @@index([weddingId, inviteCode])
+  @@map("guests")
+}
+
+// ============================================================
+// RSVP Responses
+// ============================================================
+model RsvpResponse {
+  id                  String   @id @default(cuid())
+  guestId             String   @map("guest_id")
+  weddingId           String   @map("wedding_id")
+  isAttending         Boolean  @map("is_attending")
+  guestCount          Int      @default(1) @map("guest_count")
+  mealChoice          String?  @map("meal_choice")
+  dietaryRestrictions String?  @map("dietary_restrictions")
+  message             String?
+  respondedAt         DateTime @default(now()) @map("responded_at")
+
+  wedding Wedding @relation(fields: [weddingId], references: [id])
+  guest   Guest   @relation(fields: [guestId], references: [id])
+
+  @@index([weddingId])
+  @@index([guestId])
+  @@map("rsvp_responses")
+}
+
+// ============================================================
+// Wishes / Guest Book
+// ============================================================
+model Wish {
+  id          String   @id @default(cuid())
+  weddingId   String   @map("wedding_id")
+  guestName   String   @map("guest_name")
+  phone       String?
+  content     String
+  isApproved  Boolean  @default(false) @map("is_approved")
+  isFeatured  Boolean  @default(false) @map("is_featured")
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  wedding Wedding @relation(fields: [weddingId], references: [id])
+
+  @@index([weddingId])
+  @@index([weddingId, isApproved])
+  @@map("wishes")
+}
+
+// ============================================================
+// Check-in (QR Code check-in tại tiệc)
+// ============================================================
+model CheckIn {
+  id          String   @id @default(cuid())
+  guestId     String   @map("guest_id")
+  weddingId   String   @map("wedding_id")
+  checkedInAt DateTime @default(now()) @map("checked_in_at")
+  checkInBy   String?  @map("check_in_by")
+  notes       String?
+
+  wedding Wedding @relation(fields: [weddingId], references: [id])
+  guest   Guest   @relation(fields: [guestId], references: [id])
+
+  @@index([weddingId])
+  @@index([guestId])
+  @@map("check_ins")
+}
+
+// ============================================================
+// Vendors / Suppliers
+// ============================================================
+model Vendor {
+  id                String   @id @default(cuid())
+  weddingId         String   @map("wedding_id")
+  name              String
+  category          String   @map("category")
+  contactName       String?  @map("contact_name")
+  contactPhone      String?  @map("contact_phone")
+  contactEmail       String? @map("contact_email")
+  address           String?
+  website           String?
+  serviceDescription String? @map("service_description")
+  contractValue     Float?   @map("contract_value")
+  paidAmount        Float?   @default(0) @map("paid_amount")
+  status            String?  @default("contacted")
+  rating            Int?     @default(0)
+  notes             String?
+  reminderDate      DateTime? @map("reminder_date")
+  contractFileUrl   String?  @map("contract_file_url")
+  createdAt         DateTime @default(now()) @map("created_at")
+  updatedAt         DateTime @updatedAt @map("updated_at")
+
+  wedding     Wedding      @relation(fields: [weddingId], references: [id])
+  budgetItems BudgetItem[]
+
+  @@index([weddingId])
+  @@index([weddingId, category])
+  @@map("vendors")
+}
+
+// ============================================================
+// Task Checklists
+// ============================================================
+model ChecklistItem {
+  id               String    @id @default(cuid())
+  weddingId        String    @map("wedding_id")
+  title            String
+  category         String?
+  phase            String?   @map("phase")
+  dueDate          DateTime? @map("due_date")
+  dueRelativeDays  Int?      @map("due_relative_days")
+  isCompleted      Boolean   @default(false) @map("is_completed")
+  assignedTo       String?   @map("assigned_to")
+  priority         String?   @default("medium")
+  notes            String?
+  completedAt      DateTime? @map("completed_at")
+  reminderSet      Boolean   @default(false) @map("reminder_set")
+  createdAt        DateTime  @default(now()) @map("created_at")
+  updatedAt        DateTime  @updatedAt @map("updated_at")
+
+  wedding Wedding @relation(fields: [weddingId], references: [id])
+
+  @@index([weddingId])
+  @@index([weddingId, phase])
+  @@map("checklist_items")
+}
+
+// ============================================================
+// Budget Items
+// ============================================================
+model BudgetItem {
+  id            String   @id @default(cuid())
+  weddingId     String   @map("wedding_id")
+  category      String   @map("category")
+  itemName      String   @map("item_name")
+  estimatedCost Float?   @map("estimated_cost")
+  actualCost    Float?   @map("actual_cost")
+  vendorId      String?  @map("vendor_id")
+  isPaid        Boolean  @default(false) @map("is_paid")
+  paidDate      DateTime? @map("paid_date")
+  paymentMethod String?  @map("payment_method")
+  notes         String?
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+
+  wedding Wedding @relation(fields: [weddingId], references: [id])
+  vendor  Vendor?  @relation(fields: [vendorId], references: [id])
+
+  @@index([weddingId])
+  @@index([weddingId, category])
+  @@map("budget_items")
+}
+
+// ============================================================
+// Tables / Seating
+// ============================================================
+model Table {
+  id                  String  @id @default(cuid())
+  weddingId           String  @map("wedding_id")
+  tableNumber         Int     @map("table_number")
+  tableName           String? @map("table_name")
+  capacity            Int     @default(10)
+  locationDescription String? @map("location_description")
+  isHeadTable         Boolean @default(false) @map("is_head_table")
+  createdAt           DateTime @default(now()) @map("created_at")
+
+  wedding Wedding @relation(fields: [weddingId], references: [id])
+
+  @@index([weddingId])
+  @@map("tables")
+}
+
+// ============================================================
+// Money Gifts (Mừng cưới)
+// ============================================================
+model MoneyGift {
+  id            String    @id @default(cuid())
+  weddingId     String    @map("wedding_id")
+  guestName     String    @map("guest_name")
+  phone         String?
+  amount        Float
+  paymentMethod String?   @map("payment_method")
+  bankName      String?   @map("bank_name")
+  transactionId String?   @map("transaction_id")
+  receivedAt    DateTime? @map("received_at")
+  isConfirmed   Boolean   @default(false) @map("is_confirmed")
+  createdAt     DateTime  @default(now()) @map("created_at")
+
+  wedding Wedding @relation(fields: [weddingId], references: [id])
+
+  @@index([weddingId])
+  @@map("money_gifts")
+}
+
+// ============================================================
+// Payment Gateways (cấu hình)
+// ============================================================
+model PaymentConfig {
+  id             String  @id @default(cuid())
+  weddingId      String  @map("wedding_id")
+  gatewayType    String  @map("gateway_type")
+  accountNumber  String? @map("account_number")
+  accountName    String? @map("account_name")
+  bankName       String? @map("bank_name")
+  qrCodeUrl      String? @map("qr_code_url")
+  isActive       Boolean @default(true) @map("is_active")
+  createdAt      DateTime @default(now()) @map("created_at")
+
+  wedding Wedding @relation(fields: [weddingId], references: [id])
+
+  @@map("payment_configs")
+}
