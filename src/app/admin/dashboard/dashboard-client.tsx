@@ -10,7 +10,6 @@ interface WeddingSummary {
   weddingDate: string | null;
   venueName: string | null;
   guestCount: number;
-  vendorCount: number;
 }
 
 interface DashboardProps {
@@ -18,7 +17,6 @@ interface DashboardProps {
   stats: {
     totalGuests: number;
     confirmedGuests: number;
-    totalVendors: number;
     progress: number;
   };
 }
@@ -48,12 +46,7 @@ export default function DashboardClient({ weddings, stats }: DashboardProps) {
             : "Chưa có dữ liệu"}
           icon="✅"
         />
-        <StatCard
-          title="Nhà cung cấp"
-          value={String(stats.totalVendors)}
-          subtitle="Đã liên hệ"
-          icon="🤝"
-        />
+
         <StatCard
           title="Tiến độ"
           value={`${stats.progress}%`}
@@ -99,7 +92,6 @@ export default function DashboardClient({ weddings, stats }: DashboardProps) {
                 </div>
                 <div className="flex items-center gap-4 text-sm text-gray-500">
                   <span>👥 {w.guestCount}</span>
-                  <span>🤝 {w.vendorCount}</span>
                   <span>→</span>
                 </div>
               </Link>

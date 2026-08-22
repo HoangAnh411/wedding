@@ -20,7 +20,9 @@ model User {
   createdAt     DateTime @default(now()) @map("created_at")
   updatedAt     DateTime @updatedAt @map("updated_at")
 
-  weddings Wedding[]
+  weddings       Wedding[]
+  vendors        Vendor[]
+  paymentConfigs PaymentConfig[]
 
   @@map("users")
 }
@@ -66,12 +68,10 @@ model Wedding {
   rsvpResponses  RsvpResponse[]
   wishes         Wish[]
   checkIns       CheckIn[]
-  vendors        Vendor[]
   checklistItems ChecklistItem[]
   budgetItems    BudgetItem[]
   tables         Table[]
   moneyGifts     MoneyGift[]
-  paymentConfigs PaymentConfig[]
 
   @@index([userId])
   @@map("weddings")
@@ -254,11 +254,11 @@ model CheckIn {
 }
 
 // ============================================================
-// Vendors / Suppliers
+// Vendors / Suppliers (Global)
 // ============================================================
 model Vendor {
   id                String   @id @default(cuid())
-  weddingId         String   @map("wedding_id")
+  userId            String   @map("user_id")
   name              String
   category          String   @map("category")
   contactName       String?  @map("contact_name")
@@ -277,11 +277,11 @@ model Vendor {
   createdAt         DateTime @default(now()) @map("created_at")
   updatedAt         DateTime @updatedAt @map("updated_at")
 
-  wedding     Wedding      @relation(fields: [weddingId], references: [id], onDelete: Cascade)
+  user        User         @relation(fields: [userId], references: [id], onDelete: Cascade)
   budgetItems BudgetItem[]
 
-  @@index([weddingId])
-  @@index([weddingId, category])
+  @@index([userId])
+  @@index([userId, category])
   @@map("vendors")
 }
 
@@ -381,11 +381,11 @@ model MoneyGift {
 }
 
 // ============================================================
-// Payment Gateways (cấu hình)
+// Payment Gateways (Global)
 // ============================================================
 model PaymentConfig {
   id             String  @id @default(cuid())
-  weddingId      String  @map("wedding_id")
+  userId         String  @map("user_id")
   gatewayType    String  @map("gateway_type")
   accountNumber  String? @map("account_number")
   accountName    String? @map("account_name")
@@ -394,8 +394,8 @@ model PaymentConfig {
   isActive       Boolean @default(true) @map("is_active")
   createdAt      DateTime @default(now()) @map("created_at")
 
-  wedding Wedding @relation(fields: [weddingId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  @@unique([weddingId, gatewayType])
+  @@unique([userId, gatewayType])
   @@map("payment_configs")
 }

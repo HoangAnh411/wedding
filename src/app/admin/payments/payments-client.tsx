@@ -12,12 +12,10 @@ interface PaymentConfig {
   isActive: boolean;
 }
 
-export default function PaymentClient({
+export default function PaymentsClient({
   configs: initialConfigs,
-  weddingId,
 }: {
   configs: PaymentConfig[];
-  weddingId: string;
 }) {
   const [configs, setConfigs] = useState(initialConfigs);
   const [loading, setLoading] = useState(false);
@@ -42,7 +40,7 @@ export default function PaymentClient({
       const res = await fetch("/api/payment", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...form, weddingId }),
+        body: JSON.stringify(form),
       });
       const json = await res.json();
       if (!res.ok) throw new Error(json.error || "Lỗi lưu cấu hình");

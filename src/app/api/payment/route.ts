@@ -6,24 +6,16 @@ export async function POST(request: NextRequest) {
   return withAuth(request, async (req, { userId }) => {
     try {
       const body = await req.json();
-      const { weddingId, gatewayType, accountNumber, accountName, bankName, qrCodeUrl, isActive } = body;
+      const { gatewayType, accountNumber, accountName, bankName, qrCodeUrl, isActive } = body;
 
-      if (!weddingId || !gatewayType) {
+      if (!gatewayType) {
         return apiError("Thiếu thông tin bắt buộc", 400);
       }
 
-      const wedding = await prisma.wedding.findFirst({
-        where: { id: weddingId, userId },
-      });
-
-      if (!wedding) {
-        return apiError("Không tìm thấy đám cưới", 404);
-      }
-
       const config = await prisma.paymentConfig.upsert({
-        where: { weddingId_gatewayType: { weddingId, gatewayType } },
+        where: { userId_gatewayType: { userId, gatewayType } },
         update: { accountNumber, accountName, bankName, qrCodeUrl, isActive },
-        create: { weddingId, gatewayType, accountNumber, accountName, bankName, qrCodeUrl, isActive },
+        create: { userId, gatewayType, accountNumber, accountName, bankName, qrCodeUrl, isActive },
       });
 
       return apiSuccess({ data: config });

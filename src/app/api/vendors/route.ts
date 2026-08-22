@@ -5,11 +5,8 @@ import { vendorSchema } from "@/lib/validations";
 
 export async function GET(req: NextRequest) {
   return withAuth(req, async (req, { userId }) => {
-    const { searchParams } = new URL(req.url);
-    const weddingId = searchParams.get("weddingId");
-
     const vendors = await prisma.vendor.findMany({
-      where: weddingId ? { weddingId, wedding: { userId } } : { wedding: { userId } },
+      where: { userId },
       orderBy: { createdAt: "desc" },
     });
     return apiSuccess(vendors);
@@ -21,9 +18,9 @@ export async function POST(req: NextRequest) {
     const body = await req.json();
     const parsed = vendorSchema.parse(body);
     
-    const wedding = await prisma.wedding.findFirst({ where: { id: parsed.weddingId, userId } });
-    if (!wedding) return apiError("Not found", 404);
-const vendor = await prisma.vendor.create({ data: parsed });
+    const vendor = await prisma.vendor.create({ 
+      data: { ...parsed, userId } 
+    });
     return apiSuccess(vendor, 201);
   });
 }

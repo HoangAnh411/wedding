@@ -13,9 +13,8 @@ interface WeddingDetail {
   venueAddress: string | null;
   story: string | null;
   guestCount: number;
-  vendorCount: number;
   confirmedCount: number;
-  _count: { guests: number; vendors: number; checklistItems: number; tables: number; moneyGifts: number };
+  _count: { guests: number; checklistItems: number; tables: number; moneyGifts: number };
 }
 
 export default function WeddingDetailClient({ wedding }: { wedding: WeddingDetail }) {
@@ -171,14 +170,6 @@ export default function WeddingDetailClient({ wedding }: { wedding: WeddingDetai
           href={`/admin/weddings/${wedding.id}/checklist`}
         />
         <StatsCard 
-          title="Nhà cung cấp" 
-          value={wedding._count.vendors} 
-          icon="🤝"
-          bgClass="bg-indigo-50 text-indigo-600"
-          borderClass="border-indigo-100"
-          href={`/admin/weddings/${wedding.id}/vendors`}
-        />
-        <StatsCard 
           title="Quà mừng" 
           value={wedding._count.moneyGifts} 
           icon="🎁"
@@ -198,13 +189,11 @@ export default function WeddingDetailClient({ wedding }: { wedding: WeddingDetai
           <QuickLink href={`/admin/weddings/${wedding.id}/tables`} icon="🪑" label="Bàn tiệc" />
           <QuickLink href={`/admin/weddings/${wedding.id}/budget`} icon="💰" label="Ngân sách" />
           <QuickLink href={`/admin/weddings/${wedding.id}/checklist`} icon="📋" label="Công việc" />
-          <QuickLink href={`/admin/weddings/${wedding.id}/vendors`} icon="🤝" label="Nhà cung cấp" />
           <QuickLink href={`/admin/weddings/${wedding.id}/gallery`} icon="🖼️" label="Thư viện ảnh" />
           <QuickLink href={`/admin/weddings/${wedding.id}/music`} icon="🎵" label="Nhạc nền" />
           <QuickLink href={`/admin/weddings/${wedding.id}/wishes`} icon="💌" label="Lời chúc" />
           <QuickLink href={`/admin/weddings/${wedding.id}/money-gifts`} icon="🎁" label="Mừng cưới" />
           <QuickLink href={`/admin/weddings/${wedding.id}/checkin`} icon="📷" label="Check-in" />
-          <QuickLink href={`/admin/weddings/${wedding.id}/payment`} icon="💳" label="Thanh toán" />
           <QuickLink href={`/admin/weddings/${wedding.id}/settings`} icon="⚙️" label="Cài đặt" />
         </div>
       </div>

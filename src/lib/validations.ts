@@ -29,6 +29,7 @@ export const weddingSchema = z.object({
   musicEnabled: z.boolean().optional(),
   rsvpEnabled: z.boolean().optional(),
   wishesEnabled: z.boolean().optional(),
+  isTemplate: z.boolean().optional(),
 });
 
 // ============================================================
@@ -84,7 +85,6 @@ export const wishApprovalSchema = z.object({
 // Vendor
 // ============================================================
 export const vendorSchema = z.object({
-  weddingId: z.string().min(1),
   name: z.string().min(1, "Tên nhà cung cấp là bắt buộc"),
   category: z.string().min(1),
   contactName: z.string().optional(),

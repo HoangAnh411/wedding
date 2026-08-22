@@ -13,7 +13,6 @@ interface WeddingSummary {
   venueName: string | null;
   coverImage: string | null;
   guestCount: number;
-  vendorCount: number;
   confirmedCount: number;
 }
 
@@ -102,7 +101,6 @@ export default function WeddingsClient({
               {w.venueName && <p className="mt-1 text-xs text-gray-400">{w.venueName}</p>}
               <div className="mt-4 flex items-center gap-4 text-xs text-gray-500">
                 <span>👥 {w.guestCount} khách</span>
-                <span>🤝 {w.vendorCount} NCC</span>
               </div>
             </Link>
           ))}

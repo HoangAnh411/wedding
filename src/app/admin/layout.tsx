@@ -39,19 +39,19 @@ function AdminLayoutInner({ children }: { children: React.ReactNode }) {
       { label: "Bàn tiệc", href: `/admin/weddings/${weddingId}/tables`, icon: "🪑" },
       { label: "Ngân sách", href: `/admin/weddings/${weddingId}/budget`, icon: "💰" },
       { label: "Công việc", href: `/admin/weddings/${weddingId}/checklist`, icon: "📋" },
-      { label: "Nhà cung cấp", href: `/admin/weddings/${weddingId}/vendors`, icon: "🤝" },
       { label: "Thư viện ảnh", href: `/admin/weddings/${weddingId}/gallery`, icon: "🖼️" },
       { label: "Nhạc nền", href: `/admin/weddings/${weddingId}/music`, icon: "🎵" },
       { label: "Lời chúc", href: `/admin/weddings/${weddingId}/wishes`, icon: "💌" },
       { label: "Mừng cưới", href: `/admin/weddings/${weddingId}/money-gifts`, icon: "🎁" },
       { label: "Check-in", href: `/admin/weddings/${weddingId}/checkin`, icon: "📷" },
-      { label: "Cổng thanh toán", href: `/admin/weddings/${weddingId}/payment`, icon: "💳" },
       { label: "Cài đặt", href: `/admin/weddings/${weddingId}/settings`, icon: "⚙️" },
     ];
   } else {
     navItems = [
       { label: "Đám cưới của tôi", href: "/admin", icon: "💒" },
-      { label: "Hồ sơ", href: "/admin/profile", icon: "👤" },
+      { label: "Tài chính", href: "/admin/payments", icon: "💳" },
+      { label: "Nhà cung cấp", href: "/admin/vendors", icon: "🤝" },
+      { label: "Cài đặt", href: "/admin/settings", icon: "⚙️" },
     ];
   }
 

@@ -13,7 +13,7 @@ export default async function WeddingsPage() {
   const weddings = await prisma.wedding.findMany({
     where: { userId: session.user.id },
     include: {
-      _count: { select: { guests: true, vendors: true, checklistItems: true } },
+      _count: { select: { guests: true, checklistItems: true } },
     },
     orderBy: { createdAt: "desc" },
   });
@@ -28,7 +28,6 @@ export default async function WeddingsPage() {
     venueName: w.venueName,
     coverImage: w.coverImage,
     guestCount: w._count.guests,
-    vendorCount: w._count.vendors,
     confirmedCount: 0,
   }));
 

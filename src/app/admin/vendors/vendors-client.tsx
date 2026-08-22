@@ -4,7 +4,6 @@ import { useState } from "react";
 
 interface Vendor {
   id: string;
-  weddingId: string;
   name: string;
   category: string;
   contactName: string | null;
@@ -16,16 +15,14 @@ interface Vendor {
 
 export default function VendorsClient({
   vendors: initial,
-  weddingId,
   categories,
 }: {
   vendors: Vendor[];
-  weddingId: string;
   categories: readonly string[];
 }) {
   const [vendors, setVendors] = useState(initial);
   const [showAdd, setShowAdd] = useState(false);
-  const [form, setForm] = useState({ weddingId, name: "", category: categories[0], contactName: "", contactPhone: "", contractValue: "" });
+  const [form, setForm] = useState({ name: "", category: categories[0], contactName: "", contactPhone: "", contractValue: "" });
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -41,7 +38,7 @@ export default function VendorsClient({
       const { data } = await res.json();
       setVendors((prev) => [data, ...prev]);
       setShowAdd(false);
-      setForm({ weddingId, name: "", category: categories[0], contactName: "", contactPhone: "", contractValue: "" });
+      setForm({ name: "", category: categories[0], contactName: "", contactPhone: "", contractValue: "" });
     } catch {}
     setLoading(false);
   };

@@ -17,9 +17,8 @@ export default async function WeddingDetailPage({
   const wedding = await prisma.wedding.findUnique({
     where: { id },
     include: {
-      _count: { select: { guests: true, vendors: true, checklistItems: true, tables: true, moneyGifts: true } },
+      _count: { select: { guests: true, checklistItems: true, tables: true, moneyGifts: true } },
       timelineEvents: { orderBy: { orderIndex: "asc" } },
-      paymentConfigs: { where: { isActive: true } },
     },
   });
 
@@ -40,16 +39,11 @@ export default async function WeddingDetailPage({
     createdAt: wedding.createdAt.toISOString(),
     updatedAt: wedding.updatedAt.toISOString(),
     guestCount: wedding._count.guests,
-    vendorCount: wedding._count.vendors,
     confirmedCount: confirmed,
     timelineEvents: wedding.timelineEvents.map((e) => ({
       ...e,
       eventDate: e.eventDate?.toISOString() || null,
       createdAt: e.createdAt.toISOString(),
-    })),
-    paymentConfigs: wedding.paymentConfigs.map((p) => ({
-      ...p,
-      createdAt: p.createdAt.toISOString(),
     })),
   };
 

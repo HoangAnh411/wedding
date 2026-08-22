@@ -9,9 +9,8 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
     const wedding = await prisma.wedding.findUnique({
       where: { id },
       include: {
-        _count: { select: { guests: true, vendors: true, checklistItems: true, tables: true, moneyGifts: true } },
+        _count: { select: { guests: true, checklistItems: true, tables: true, moneyGifts: true } },
         timelineEvents: { orderBy: { orderIndex: "asc" } },
-        paymentConfigs: { where: { isActive: true } },
       },
     });
     if (!wedding) return apiError("Not found", 404);

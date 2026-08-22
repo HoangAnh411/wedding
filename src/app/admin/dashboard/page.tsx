@@ -10,12 +10,11 @@ export default async function DashboardPage() {
   const weddings = await prisma.wedding.findMany({
     where: { userId: session.user.id },
     include: {
-      _count: { select: { guests: true, vendors: true, checklistItems: true } },
+      _count: { select: { guests: true, checklistItems: true } },
     },
   });
 
   const totalGuests = weddings.reduce((sum, w) => sum + w._count.guests, 0);
-  const totalVendors = weddings.reduce((sum, w) => sum + w._count.vendors, 0);
 
   const confirmedGuests = await prisma.guest.count({
     where: {
@@ -41,7 +40,6 @@ export default async function DashboardPage() {
     weddingDate: w.weddingDate?.toISOString() || null,
     venueName: w.venueName,
     guestCount: w._count.guests,
-    vendorCount: w._count.vendors,
   }));
 
   return (
@@ -50,7 +48,6 @@ export default async function DashboardPage() {
       stats={{
         totalGuests,
         confirmedGuests,
-        totalVendors,
         progress,
       }}
     />

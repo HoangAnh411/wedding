@@ -6,13 +6,12 @@ import VendorsClient from "./vendors-client";
 
 export const dynamic = "force-dynamic";
 
-export default async function VendorsPage({ params }: { params: Promise<{ id: string }> }) {
+export default async function VendorsPage() {
   const session = await auth();
   if (!session?.user) redirect("/admin/login");
-  const { id } = await params;
 
   const vendors = await prisma.vendor.findMany({
-    where: { weddingId: id, wedding: { userId: session.user.id } },
+    where: { userId: session.user.id },
     orderBy: { createdAt: "desc" },
   });
 
@@ -23,5 +22,5 @@ export default async function VendorsPage({ params }: { params: Promise<{ id: st
     reminderDate: v.reminderDate?.toISOString() || null,
   }));
 
-  return <VendorsClient vendors={serialized} weddingId={id} categories={VENDOR_CATEGORIES} />;
+  return <VendorsClient vendors={serialized} categories={VENDOR_CATEGORIES} />;
 }

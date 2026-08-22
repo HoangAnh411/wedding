@@ -8,7 +8,7 @@ export async function GET(req: NextRequest) {
   return withAuth(req, async (req, { userId }) => {
     const weddings = await prisma.wedding.findMany({
       where: { userId },
-      include: { _count: { select: { guests: true, vendors: true, checklistItems: true } } },
+      include: { _count: { select: { guests: true, checklistItems: true } } },
       orderBy: { createdAt: "desc" },
     });
     return apiSuccess(weddings);

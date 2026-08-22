@@ -2,58 +2,83 @@
 
 import { useState } from "react";
 
-interface UserInfo {
+interface WeddingSettings {
   id: string;
-  name: string | null;
-  email: string;
+  isTemplate: boolean;
+  galleryEnabled: boolean;
+  musicEnabled: boolean;
+  rsvpEnabled: boolean;
+  wishesEnabled: boolean;
 }
 
 export default function SettingsClient({
-  user: initialUser,
-  weddingId,
+  wedding: initialWedding,
 }: {
-  user: UserInfo;
-  weddingId: string;
+  wedding: WeddingSettings;
 }) {
-  const [user, setUser] = useState(initialUser);
-  const [name, setName] = useState(initialUser.name || "");
+  const [wedding, setWedding] = useState(initialWedding);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState<{
     type: "success" | "error";
     text: string;
   } | null>(null);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const toggleSetting = async (field: keyof WeddingSettings, value: boolean) => {
     setLoading(true);
     setMessage(null);
     try {
-      const res = await fetch("/api/user/profile", {
+      const res = await fetch(`/api/weddings/${wedding.id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name: name.trim() }),
+        body: JSON.stringify({ [field]: value }),
       });
       const json = await res.json();
-      if (!res.ok)
-        throw new Error(json.error || "Failed to update profile");
-      setUser(json.data);
-      setMessage({ type: "success", text: "Cập nhật thông tin thành công" });
+      if (!res.ok) throw new Error(json.error || "Lỗi lưu cấu hình");
+      
+      setWedding(prev => ({ ...prev, [field]: value }));
+      setMessage({ type: "success", text: "Lưu cấu hình thành công" });
     } catch (err) {
       setMessage({
         type: "error",
-        text: err instanceof Error ? err.message : "Failed to update profile",
+        text: err instanceof Error ? err.message : "Có lỗi xảy ra",
       });
     } finally {
       setLoading(false);
     }
   };
 
+  const Switch = ({ checked, onChange, label, description }: { checked: boolean, onChange: (c: boolean) => void, label: string, description: string }) => (
+    <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg border border-gray-100">
+      <div>
+        <h3 className="text-sm font-medium text-gray-900">{label}</h3>
+        <p className="text-sm text-gray-500">{description}</p>
+      </div>
+      <button
+        type="button"
+        role="switch"
+        aria-checked={checked}
+        onClick={() => onChange(!checked)}
+        disabled={loading}
+        className={`${
+          checked ? 'bg-rose-600' : 'bg-gray-200'
+        } relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-rose-600 focus:ring-offset-2 disabled:opacity-50`}
+      >
+        <span
+          aria-hidden="true"
+          className={`${
+            checked ? 'translate-x-5' : 'translate-x-0'
+          } pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out`}
+        />
+      </button>
+    </div>
+  );
+
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-gray-900">Cài đặt</h1>
+        <h1 className="text-2xl font-bold text-gray-900">Cấu hình đám cưới</h1>
         <p className="mt-1 text-sm text-gray-500">
-          Cấu hình thông tin tài khoản
+          Bật/tắt các tính năng trên trang thiệp cưới của bạn
         </p>
       </div>
 
@@ -70,106 +95,40 @@ export default function SettingsClient({
       )}
 
       <div className="rounded-xl border border-gray-200 bg-white p-6">
-        <h2 className="text-lg font-semibold text-gray-900">
-          Thông tin tài khoản
+        <h2 className="text-lg font-semibold text-gray-900 mb-4">
+          Tính năng hiển thị
         </h2>
-        <form onSubmit={handleSubmit} className="mt-4 space-y-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Email
-            </label>
-            <input
-              type="email"
-              value={user.email}
-              className="mt-1 block w-full max-w-md rounded-lg border border-gray-200 bg-gray-50 px-3 py-2 text-sm text-gray-500"
-              disabled
-            />
-            <p className="mt-1 text-xs text-gray-400">
-              Email không thể thay đổi
-            </p>
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Tên
-            </label>
-            <input
-              type="text"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              className="mt-1 block w-full max-w-md rounded-lg border border-gray-300 px-3 py-2 text-sm"
-              placeholder="Your name"
-              required
-            />
-          </div>
-          <button
-            type="submit"
-            disabled={loading}
-            className="rounded-lg bg-rose-600 px-4 py-2 text-sm font-medium text-white hover:bg-rose-700 disabled:opacity-50"
-          >
-            {loading ? "Đang lưu..." : "Lưu thay đổi"}
-          </button>
-        </form>
-      </div>
-
-      <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
-        <h2 className="font-serif text-2xl font-bold text-gray-900 mb-6">
-          Cấu hình gửi thiệp (Email & Zalo)
-        </h2>
-        <div className="space-y-6">
-          <div className="rounded-xl border border-primary/20 bg-primary/5 p-5">
-            <h3 className="flex items-center text-base font-semibold text-primary">
-              <span className="mr-2 text-xl">📧</span> Cấu hình Email (SMTP - Gmail App Password)
-            </h3>
-            <div className="mt-3 text-sm text-gray-700 space-y-3">
-              <p>
-                Hệ thống sử dụng Gmail của bạn để gửi thiệp mời. Bạn cần tạo <strong className="font-semibold text-gray-900">Mật khẩu ứng dụng (App Password)</strong> từ tài khoản Google:
-              </p>
-              <ol className="list-decimal pl-5 space-y-2 text-gray-600">
-                <li>Truy cập <a href="https://myaccount.google.com/security" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline font-medium">Tài khoản Google &gt; Bảo mật</a>.</li>
-                <li>Đảm bảo bạn đã bật <strong>Xác minh 2 bước</strong>.</li>
-                <li>Tìm kiếm <strong>"Mật khẩu ứng dụng"</strong> trong thanh tìm kiếm của Google Account.</li>
-                <li>Tạo mật khẩu với tên bất kỳ (VD: "Wedding App") và copy chuỗi 16 ký tự.</li>
-              </ol>
-              <div className="mt-4 rounded-lg bg-white p-4 border border-gray-100 shadow-sm">
-                <p className="font-medium text-gray-900 mb-2">Cấu hình file <code className="bg-gray-100 px-1.5 py-0.5 rounded text-xs text-rose-600">.env</code> của bạn:</p>
-                <div className="font-mono text-xs text-gray-600 space-y-1">
-                  <div><span className="text-gray-400">SMTP_HOST=</span>smtp.gmail.com</div>
-                  <div><span className="text-gray-400">SMTP_PORT=</span>465</div>
-                  <div><span className="text-gray-400">SMTP_USER=</span>your-email@gmail.com</div>
-                  <div><span className="text-gray-400">SMTP_PASS=</span>16-ky-tu-mat-khau-ung-dung</div>
-                </div>
-              </div>
-            </div>
-          </div>
-          
-          <div className="rounded-xl border border-blue-100 bg-blue-50/50 p-5">
-            <h3 className="flex items-center text-base font-semibold text-blue-800">
-              <span className="mr-2 text-xl">💬</span> Zalo OA
-            </h3>
-            <p className="mt-2 text-sm text-blue-700">
-              Để gửi thiệp qua Zalo, vui lòng cấu hình Zalo OA Access Token trong file <code className="rounded bg-blue-100/50 px-1.5 py-0.5 text-xs font-mono text-blue-800 border border-blue-200">.env</code> với biến:
-              <br/><br/>
-              <code className="font-mono text-xs font-bold bg-white px-2 py-1 rounded border border-blue-200">ZALO_OA_TOKEN=your-access-token</code>
-            </p>
-          </div>
-        </div>
-      </div>
-
-      <div className="rounded-xl border border-gray-200 bg-white p-6">
-        <h2 className="text-lg font-semibold text-gray-900">
-          Cấu hình nhận tiền mừng
-        </h2>
-        <div className="mt-4 space-y-4">
-          <div className="rounded-lg border border-amber-100 bg-amber-50 p-4">
-            <h3 className="text-sm font-medium text-amber-800">
-              Thông tin tài khoản ngân hàng
-            </h3>
-            <p className="mt-1 text-sm text-amber-600">
-              Cấu hình thông tin tài khoản ngân hàng trong phần quản lý
-              đám cưới &gt; chi tiết đám cưới &gt; Cấu hình nhận tiền
-              mừng.
-            </p>
-          </div>
+        <div className="space-y-4">
+          <Switch
+            checked={wedding.rsvpEnabled}
+            onChange={(val) => toggleSetting("rsvpEnabled", val)}
+            label="Xác nhận tham dự (RSVP)"
+            description="Cho phép khách mời xác nhận tham dự trên thiệp"
+          />
+          <Switch
+            checked={wedding.wishesEnabled}
+            onChange={(val) => toggleSetting("wishesEnabled", val)}
+            label="Gửi lời chúc"
+            description="Cho phép khách mời gửi lời chúc trực tuyến"
+          />
+          <Switch
+            checked={wedding.galleryEnabled}
+            onChange={(val) => toggleSetting("galleryEnabled", val)}
+            label="Album ảnh"
+            description="Hiển thị album ảnh cưới trên trang thiệp"
+          />
+          <Switch
+            checked={wedding.musicEnabled}
+            onChange={(val) => toggleSetting("musicEnabled", val)}
+            label="Nhạc nền"
+            description="Tự động phát nhạc nền khi khách xem thiệp"
+          />
+          <Switch
+            checked={wedding.isTemplate}
+            onChange={(val) => toggleSetting("isTemplate", val)}
+            label="Làm Template"
+            description="Lưu đám cưới này thành giao diện mẫu"
+          />
         </div>
       </div>
     </div>

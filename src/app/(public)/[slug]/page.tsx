@@ -45,7 +45,9 @@ export default async function PublicInvitationPage({
       galleryImages: { orderBy: { orderIndex: "asc" } },
       musicTracks: { where: { isDefault: true } },
       wishes: { where: { isApproved: true }, orderBy: { createdAt: "desc" }, take: 20 },
-      paymentConfigs: { where: { isActive: true } },
+      user: {
+        include: { paymentConfigs: { where: { isActive: true } } }
+      },
     },
   });
 
@@ -78,7 +80,7 @@ export default async function PublicInvitationPage({
       ...w,
       createdAt: w.createdAt.toISOString(),
     })),
-    paymentConfigs: wedding.paymentConfigs.map((p) => ({
+    paymentConfigs: wedding.user.paymentConfigs.map((p) => ({
       ...p,
       createdAt: p.createdAt.toISOString(),
     })),

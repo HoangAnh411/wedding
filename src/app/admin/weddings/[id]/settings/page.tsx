@@ -19,12 +19,5 @@ export default async function SettingsPage({
 
   if (!wedding) redirect("/admin");
 
-  const user = await prisma.user.findUnique({
-    where: { id: session.user.id },
-    select: { id: true, name: true, email: true },
-  });
-
-  if (!user) redirect("/admin/login");
-
-  return <SettingsClient user={user} weddingId={weddingId} />;
+  return <SettingsClient wedding={wedding} />;
 }
