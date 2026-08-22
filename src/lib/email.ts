@@ -204,3 +204,53 @@ export async function sendAccountEmail(email: string, password: string, weddingT
     };
   }
 }
+
+export async function sendStaffAccountEmail(email: string, password: string, name: string): Promise<EmailSendResult> {
+  const hasSmtpConfig = process.env.MAIL_HOST && process.env.MAIL_USERNAME && process.env.MAIL_PASSWORD;
+
+  if (!hasSmtpConfig) {
+    return {
+      success: false,
+      message: "SMTP chưa được cấu hình.",
+    };
+  }
+
+  const loginUrl = process.env.AUTH_URL || process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+  
+  const html = `
+    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #eee; border-radius: 10px;">
+      <h2 style="color: #e11d48; text-align: center;">Hệ thống Quản lý Đám Cưới</h2>
+      <p>Xin chào ${name},</p>
+      <p>Bạn đã được tạo tài khoản Nhân viên (Staff) thành công trên hệ thống quản lý đám cưới.</p>
+      <p>Dưới đây là thông tin đăng nhập của bạn:</p>
+      <div style="background-color: #f9fafb; padding: 15px; border-radius: 5px; margin: 20px 0;">
+        <p style="margin: 5px 0;"><strong>Đường dẫn đăng nhập:</strong> <a href="${loginUrl}/admin/login" style="color: #e11d48;">${loginUrl}/admin/login</a></p>
+        <p style="margin: 5px 0;"><strong>Email:</strong> ${email}</p>
+        <p style="margin: 5px 0;"><strong>Mật khẩu:</strong> ${password}</p>
+      </div>
+      <p>Vui lòng đăng nhập và bảo mật thông tin tài khoản của bạn.</p>
+      <p>Trân trọng,<br/>Đội ngũ Quản trị (Superadmin)</p>
+    </div>
+  `;
+
+  try {
+    const transporter = getTransporter();
+    const info = await transporter.sendMail({
+      from: getFromAddress(),
+      to: email,
+      subject: 'Tài khoản nhân viên quản lý đám cưới của bạn',
+      html: html,
+    });
+
+    return {
+      success: true,
+      message: "Gửi email thành công",
+      data: info,
+    };
+  } catch (error) {
+    return {
+      success: false,
+      message: `Lỗi gửi email: ${error instanceof Error ? error.message : "Unknown error"}`,
+    };
+  }
+}
