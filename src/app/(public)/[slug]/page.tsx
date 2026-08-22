@@ -1,13 +1,43 @@
 import { prisma } from "@/lib/prisma";
 import { notFound } from "next/navigation";
+import { Metadata } from "next";
 import InvitationClient from "./invitation-client";
+
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  const { slug } = await params;
+  const wedding = await prisma.wedding.findUnique({
+    where: { slug },
+    select: { groomName: true, brideName: true, weddingDate: true, coverImage: true },
+  });
+
+  if (!wedding) {
+    return { title: "Thiệp cưới" };
+  }
+
+  const title = `Thiệp cưới của ${wedding.groomName} & ${wedding.brideName}`;
+  const dateStr = wedding.weddingDate ? `vào ngày ${new Date(wedding.weddingDate).toLocaleDateString("vi-VN")}` : "";
+  const description = `Trân trọng kính mời quý khách đến dự lễ cưới của ${wedding.groomName} và ${wedding.brideName} ${dateStr}.`;
+  
+  return {
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+      images: [wedding.coverImage || "/placeholder-wedding.jpg"],
+    },
+  };
+}
 
 export default async function PublicInvitationPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ slug: string }>;
+  searchParams: Promise<{ code?: string }>;
 }) {
   const { slug } = await params;
+  const { code } = await searchParams;
   const wedding = await prisma.wedding.findUnique({
     where: { slug },
     include: {
@@ -54,5 +84,22 @@ export default async function PublicInvitationPage({
     })),
   };
 
-  return <InvitationClient wedding={serialized} />;
+  let guestInfo = null;
+  if (code) {
+    const guest = await prisma.guest.findFirst({
+      where: { inviteCode: code, weddingId: wedding.id },
+    });
+    if (guest) {
+      guestInfo = { name: guest.name, phone: guest.phone };
+      // Mark as opened
+      if (!guest.hasOpenedInvitation) {
+        await prisma.guest.update({
+          where: { id: guest.id },
+          data: { hasOpenedInvitation: true, openedAt: new Date() },
+        });
+      }
+    }
+  }
+
+  return <InvitationClient wedding={serialized} guestInfo={guestInfo || undefined} />;
 }

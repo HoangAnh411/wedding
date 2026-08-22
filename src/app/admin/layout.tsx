@@ -6,21 +6,6 @@ import { useState } from "react";
 import { signOut, useSession } from "next-auth/react";
 import Providers from "@/components/providers";
 
-const NAV_ITEMS = [
-  { label: "Tổng quan", href: "/admin/dashboard", icon: "📊" },
-  { label: "Đám cưới", href: "/admin/weddings", icon: "💒" },
-  { label: "Khách mời", href: "/admin/guests", icon: "👥" },
-  { label: "Bàn tiệc", href: "/admin/tables", icon: "🪑" },
-  { label: "Nhà cung cấp", href: "/admin/vendors", icon: "🤝" },
-  { label: "Ngân sách", href: "/admin/budget", icon: "💰" },
-  { label: "Checklist", href: "/admin/checklist", icon: "✅" },
-  { label: "Hình ảnh", href: "/admin/gallery", icon: "📸" },
-  { label: "Nhạc", href: "/admin/music", icon: "🎵" },
-  { label: "Check-in", href: "/admin/checkin", icon: "📋" },
-  { label: "Tiền mừng", href: "/admin/money-gifts", icon: "🧧" },
-  { label: "Cài đặt", href: "/admin/settings", icon: "⚙️" },
-];
-
 export default function AdminLayout({
   children,
 }: {
@@ -42,6 +27,34 @@ function AdminLayoutInner({ children }: { children: React.ReactNode }) {
     return <>{children}</>;
   }
 
+  const weddingMatch = pathname.match(/^\/admin\/weddings\/([^/]+)/);
+  const isWeddingContext = weddingMatch && weddingMatch[1] !== 'new';
+  const weddingId = isWeddingContext ? weddingMatch[1] : null;
+
+  let navItems = [];
+  if (isWeddingContext) {
+    navItems = [
+      { label: "Tổng quan", href: `/admin/weddings/${weddingId}`, icon: "📊" },
+      { label: "Khách mời", href: `/admin/weddings/${weddingId}/guests`, icon: "👥" },
+      { label: "Bàn tiệc", href: `/admin/weddings/${weddingId}/tables`, icon: "🪑" },
+      { label: "Ngân sách", href: `/admin/weddings/${weddingId}/budget`, icon: "💰" },
+      { label: "Công việc", href: `/admin/weddings/${weddingId}/checklist`, icon: "📋" },
+      { label: "Nhà cung cấp", href: `/admin/weddings/${weddingId}/vendors`, icon: "🤝" },
+      { label: "Thư viện ảnh", href: `/admin/weddings/${weddingId}/gallery`, icon: "🖼️" },
+      { label: "Nhạc nền", href: `/admin/weddings/${weddingId}/music`, icon: "🎵" },
+      { label: "Lời chúc", href: `/admin/weddings/${weddingId}/wishes`, icon: "💌" },
+      { label: "Mừng cưới", href: `/admin/weddings/${weddingId}/money-gifts`, icon: "🎁" },
+      { label: "Check-in", href: `/admin/weddings/${weddingId}/checkin`, icon: "📷" },
+      { label: "Cổng thanh toán", href: `/admin/weddings/${weddingId}/payment`, icon: "💳" },
+      { label: "Cài đặt", href: `/admin/weddings/${weddingId}/settings`, icon: "⚙️" },
+    ];
+  } else {
+    navItems = [
+      { label: "Đám cưới của tôi", href: "/admin", icon: "💒" },
+      { label: "Hồ sơ", href: "/admin/profile", icon: "👤" },
+    ];
+  }
+
   return (
     <div className="flex min-h-screen bg-gray-50">
       {sidebarOpen && (
@@ -57,7 +70,7 @@ function AdminLayoutInner({ children }: { children: React.ReactNode }) {
         }`}
       >
         <div className="flex h-16 items-center justify-between border-b border-gray-200 px-4">
-          <Link href="/admin/dashboard" className="font-serif text-lg font-bold text-rose-600">
+          <Link href="/admin" className="font-serif text-lg font-bold text-rose-600">
             Wedding Admin
           </Link>
           <button
@@ -69,8 +82,8 @@ function AdminLayoutInner({ children }: { children: React.ReactNode }) {
         </div>
 
         <nav className="space-y-1 p-3">
-          {NAV_ITEMS.map((item) => {
-            const isActive = pathname === item.href || pathname.startsWith(item.href + "/");
+          {navItems.map((item) => {
+            const isActive = pathname === item.href || (item.href !== "/admin" && item.href !== `/admin/weddings/${weddingId}` && pathname.startsWith(item.href + "/"));
             return (
               <Link
                 key={item.href}
@@ -100,7 +113,7 @@ function AdminLayoutInner({ children }: { children: React.ReactNode }) {
             </svg>
           </button>
 
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-4 ml-auto">
             <span className="text-sm text-gray-500">{session?.user?.name || "Admin"}</span>
             <button
               onClick={() => signOut({ callbackUrl: "/admin/login" })}

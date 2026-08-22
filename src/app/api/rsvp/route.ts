@@ -1,72 +1,97 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { withAuth, apiSuccess, apiError } from "@/lib/api-helper";
+import { rateLimit } from "@/lib/rate-limit";
 
 export async function POST(request: NextRequest) {
   try {
-    const body = await request.json();
-    const { guestId, weddingId, isAttending, guestCount, mealChoice, dietaryRestrictions, message } = body;
-
-    if (!guestId || !weddingId) {
-      return NextResponse.json(
-        { error: "Thiếu thông tin bắt buộc" },
-        { status: 400 },
-      );
+    const ip = request.headers.get("x-forwarded-for") || "unknown-ip";
+    const rateLimitResult = rateLimit(`rsvp_${ip}`, 5, 60000);
+    
+    if (!rateLimitResult.success) {
+      return apiError("Quá nhiều yêu cầu, vui lòng thử lại sau", 429);
     }
 
-    // Create RSVP response
-    const rsvp = await prisma.rsvpResponse.create({
-      data: {
-        guestId,
-        weddingId,
-        isAttending,
-        guestCount: guestCount || 1,
-        mealChoice,
-        dietaryRestrictions,
-        message,
-      },
+    const body = await request.json();
+    const { weddingId, guestName, phone, isAttending, guestCount, message } = body;
+
+    if (!weddingId || !guestName) {
+      return apiError("Thiếu thông tin bắt buộc", 400);
+    }
+
+    const wedding = await prisma.wedding.findUnique({ where: { id: weddingId } });
+    if (!wedding) {
+      return apiError("Không tìm thấy đám cưới", 404);
+    }
+
+    const rsvp = await prisma.$transaction(async (tx) => {
+      let guest = null;
+      
+      if (phone) {
+        guest = await tx.guest.findFirst({
+          where: { phone, weddingId }
+        });
+      }
+
+      if (!guest) {
+        guest = await tx.guest.create({
+          data: {
+            name: guestName,
+            phone: phone || null,
+            weddingId,
+            isAttending,
+            rsvpAt: new Date(),
+          }
+        });
+      } else {
+        guest = await tx.guest.update({
+          where: { id: guest.id },
+          data: {
+            isAttending,
+            rsvpAt: new Date(),
+            name: guestName,
+          }
+        });
+      }
+
+      const newRsvp = await tx.rsvpResponse.create({
+        data: {
+          guestId: guest.id,
+          weddingId,
+          isAttending,
+          guestCount: guestCount || 1,
+          message,
+        }
+      });
+
+      return newRsvp;
     });
 
-    // Update guest status
-    await prisma.guest.update({
-      where: { id: guestId },
-      data: {
-        isAttending,
-        rsvpAt: new Date(),
-      },
-    });
-
-    return NextResponse.json({ data: rsvp });
+    return apiSuccess(rsvp);
   } catch (error) {
-    return NextResponse.json(
-      { error: `Lỗi server: ${error instanceof Error ? error.message : "Unknown error"}` },
-      { status: 500 },
-    );
+    return apiError(`Lỗi server: ${error instanceof Error ? error.message : "Unknown error"}`, 500);
   }
 }
 
 export async function GET(request: NextRequest) {
-  const { searchParams } = new URL(request.url);
-  const weddingId = searchParams.get("weddingId");
+  return withAuth(request, async () => {
+    const { searchParams } = new URL(request.url);
+    const weddingId = searchParams.get("weddingId");
 
-  if (!weddingId) {
-    return NextResponse.json(
-      { error: "Thiếu weddingId" },
-      { status: 400 },
-    );
-  }
+    if (!weddingId) {
+      return apiError("Thiếu weddingId", 400);
+    }
 
-  try {
-    const responses = await prisma.rsvpResponse.findMany({
-      where: { weddingId },
-      include: { wedding: true },
-      orderBy: { respondedAt: "desc" },
-    });
+    try {
+      const responses = await prisma.rsvpResponse.findMany({
+        where: { weddingId },
+        include: { wedding: true },
+        orderBy: { respondedAt: "desc" },
+      });
 
-    return NextResponse.json({ data: responses });
-  } catch (error) {
-    return NextResponse.json(
-      { error: `Lỗi server: ${error instanceof Error ? error.message : "Unknown error"}` },
-      { status: 500 },
-    );
-  }
+      return apiSuccess(responses);
+    } catch (error) {
+      return apiError(`Lỗi server: ${error instanceof Error ? error.message : "Unknown error"}`, 500);
+    }
+  });
 }

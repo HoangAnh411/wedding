@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { withAuth, apiSuccess } from "@/lib/api-helper";
+import { withAuth, apiSuccess, apiError } from "@/lib/api-helper";
 import { weddingSchema } from "@/lib/validations";
 
 export async function GET(req: Request, { params }: { params: Promise<{ id: string }> }) {
@@ -14,7 +14,7 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
         paymentConfigs: { where: { isActive: true } },
       },
     });
-    if (!wedding) return NextResponse.json({ error: "Not found" }, { status: 404 });
+    if (!wedding) return apiError("Not found", 404);
     return apiSuccess(wedding);
   });
 }

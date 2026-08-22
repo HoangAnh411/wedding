@@ -8,18 +8,18 @@ export default function ErrorPage({
   reset: () => void;
 }) {
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-rose-50 to-white px-4">
-      <div className="text-center">
-        <div className="mx-auto mb-4 flex h-24 w-24 items-center justify-center rounded-full bg-red-100">
+    <div className="flex min-h-screen flex-col items-center justify-center bg-background px-4">
+      <div className="text-center animate-fade-in-up">
+        <div className="mx-auto mb-6 flex h-24 w-24 items-center justify-center rounded-full bg-red-50 text-red-400 border border-red-100">
           <span className="text-4xl">😅</span>
         </div>
-        <h1 className="text-2xl font-bold text-gray-900">Có lỗi xảy ra</h1>
-        <p className="mt-2 text-sm text-gray-500">
-          {error.message || "Đã có lỗi không mong muốn. Vui lòng thử lại."}
+        <h1 className="font-serif text-3xl md:text-4xl font-bold text-foreground mb-4">Đã có lỗi xảy ra</h1>
+        <p className="text-foreground/70 mb-8 max-w-md mx-auto text-sm md:text-base">
+          {error.message || "Chúng tôi đã gặp sự cố không mong muốn. Xin vui lòng thử lại sau."}
         </p>
         <button
           onClick={reset}
-          className="mt-6 rounded-lg bg-rose-600 px-6 py-2.5 text-sm font-medium text-white shadow-sm transition hover:bg-rose-700"
+          className="rounded-full bg-primary px-8 py-3 text-sm font-medium text-primary-foreground shadow-sm transition-all hover:bg-primary/90 hover:scale-105 duration-300"
         >
           Thử lại
         </button>

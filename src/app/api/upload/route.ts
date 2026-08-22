@@ -16,7 +16,13 @@ export async function POST(req: NextRequest) {
       const bytes = await file.arrayBuffer();
       const buffer = Buffer.from(bytes);
 
-      const ext = file.name.split(".").pop() || "png";
+      const ext = file.name.split(".").pop()?.toLowerCase() || "png";
+      const ALLOWED_EXTENSIONS = ['jpg', 'jpeg', 'png', 'webp', 'gif', 'mp3', 'mp4'];
+      const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
+
+      if (file.size > MAX_FILE_SIZE) return apiError('File quá lớn (tối đa 5MB)', 400);
+      if (!ALLOWED_EXTENSIONS.includes(ext)) return apiError('Định dạng file không được hỗ trợ', 400);
+
       const filename = `${Date.now()}-${Math.random().toString(36).substring(2, 8)}.${ext}`;
       const uploadDir = join(process.cwd(), "public", "uploads");
       const filepath = join(uploadDir, filename);

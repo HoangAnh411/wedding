@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, TouchEvent } from "react";
+import Image from "next/image";
 
 interface LightboxImage {
   id: string;
@@ -14,6 +15,33 @@ export function ImageLightbox({
   images: LightboxImage[];
 }) {
   const [current, setCurrent] = useState<number | null>(null);
+  const [touchStart, setTouchStart] = useState<number | null>(null);
+  const [touchEnd, setTouchEnd] = useState<number | null>(null);
+
+  const minSwipeDistance = 50;
+
+  const onTouchStart = (e: TouchEvent) => {
+    setTouchEnd(null);
+    setTouchStart(e.targetTouches[0].clientX);
+  };
+
+  const onTouchMove = (e: TouchEvent) => {
+    setTouchEnd(e.targetTouches[0].clientX);
+  };
+
+  const onTouchEnd = () => {
+    if (!touchStart || !touchEnd) return;
+    const distance = touchStart - touchEnd;
+    const isLeftSwipe = distance > minSwipeDistance;
+    const isRightSwipe = distance < -minSwipeDistance;
+
+    if (isLeftSwipe && current !== null && current < images.length - 1) {
+      setCurrent(current + 1);
+    }
+    if (isRightSwipe && current !== null && current > 0) {
+      setCurrent(current - 1);
+    }
+  };
 
   const handleKeyDown = useCallback(
     (e: KeyboardEvent) => {
@@ -30,6 +58,17 @@ export function ImageLightbox({
     return () => document.removeEventListener("keydown", handleKeyDown);
   }, [handleKeyDown]);
 
+  useEffect(() => {
+    if (current !== null) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [current]);
+
   return (
     <>
       <div className="mt-8 grid gap-4 sm:grid-cols-3">
@@ -40,11 +79,12 @@ export function ImageLightbox({
             className="group relative aspect-square overflow-hidden rounded-xl bg-gradient-to-br from-rose-100 to-pink-100"
           >
             {img.imageUrl ? (
-              <img
+              <Image
                 src={img.imageUrl}
                 alt={img.caption || ""}
-                className="h-full w-full object-cover transition group-hover:scale-105"
-                loading="lazy"
+                fill
+                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                className="object-cover transition-transform duration-500 group-hover:scale-110"
               />
             ) : (
               <div className="flex h-full items-center justify-center">
@@ -83,13 +123,24 @@ export function ImageLightbox({
             </button>
           )}
 
-          <div className="max-h-[90vh] max-w-[90vw]" onClick={(e) => e.stopPropagation()}>
+          <div 
+            className="max-h-[90vh] max-w-[90vw] relative flex flex-col items-center justify-center transition-opacity duration-300" 
+            onClick={(e) => e.stopPropagation()}
+            onTouchStart={onTouchStart}
+            onTouchMove={onTouchMove}
+            onTouchEnd={onTouchEnd}
+          >
             {images[current].imageUrl ? (
-              <img
-                src={images[current].imageUrl}
-                alt={images[current].caption || ""}
-                className="max-h-[85vh] rounded-lg object-contain"
-              />
+              <div className="relative h-[80vh] w-[90vw] sm:w-[80vw]">
+                <Image
+                  src={images[current].imageUrl}
+                  alt={images[current].caption || ""}
+                  fill
+                  className="object-contain"
+                  sizes="100vw"
+                  priority
+                />
+              </div>
             ) : (
               <div className="flex h-64 w-64 items-center justify-center rounded-lg bg-white/10">
                 <span className="text-6xl">📸</span>

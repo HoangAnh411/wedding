@@ -1,7 +1,9 @@
-const { Client } = require("pg");
+const { PrismaClient } = require("@prisma/client");
 const { hash } = require("bcryptjs");
+const prisma = new PrismaClient();
+const { Client } = require("pg");
 
-const connectionString = "postgresql://postgres.dxigsewilgevlrdxlmvf:hoanganh%40411@aws-0-ap-northeast-1.pooler.supabase.com:6543/postgres?pgbouncer=true";
+const connectionString = process.env.DATABASE_URL;
 
 async function main() {
   console.log("🌱 Seeding database...");

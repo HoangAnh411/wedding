@@ -7,22 +7,36 @@ export async function GET(req: NextRequest) {
   return withAuth(req, async (req, { userId }) => {
     const { searchParams } = new URL(req.url);
     const weddingId = searchParams.get("weddingId");
+    const page = parseInt(searchParams.get("page") || "1", 10);
+    const limit = parseInt(searchParams.get("limit") || "50", 10);
+    const skip = (page - 1) * limit;
 
-    const guests = await prisma.guest.findMany({
-      where: weddingId ? { weddingId } : { wedding: { userId } },
-      orderBy: { createdAt: "desc" },
-    });
+    const where = weddingId ? { weddingId, wedding: { userId } } : { wedding: { userId } };
 
-    return apiSuccess(guests);
+    const [guests, total] = await Promise.all([
+      prisma.guest.findMany({
+        where,
+        orderBy: { createdAt: "desc" },
+        skip,
+        take: limit,
+      }),
+      prisma.guest.count({ where })
+    ]);
+
+    const totalPages = Math.ceil(total / limit);
+    return apiSuccess(guests, 200, { total, page, limit, totalPages });
   });
 }
 
 export async function POST(req: NextRequest) {
-  return withAuth(req, async (req) => {
+  return withAuth(req, async (req, { userId }) => {
     const body = await req.json();
     const parsed = guestSchema.parse(body);
 
-    const guest = await prisma.guest.create({
+    
+    const wedding = await prisma.wedding.findFirst({ where: { id: parsed.weddingId, userId } });
+    if (!wedding) return apiError("Not found", 404);
+const guest = await prisma.guest.create({
       data: {
         ...parsed,
         weddingId: parsed.weddingId,

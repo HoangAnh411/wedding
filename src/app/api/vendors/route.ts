@@ -9,7 +9,7 @@ export async function GET(req: NextRequest) {
     const weddingId = searchParams.get("weddingId");
 
     const vendors = await prisma.vendor.findMany({
-      where: weddingId ? { weddingId } : { wedding: { userId } },
+      where: weddingId ? { weddingId, wedding: { userId } } : { wedding: { userId } },
       orderBy: { createdAt: "desc" },
     });
     return apiSuccess(vendors);
@@ -17,10 +17,13 @@ export async function GET(req: NextRequest) {
 }
 
 export async function POST(req: NextRequest) {
-  return withAuth(req, async (req) => {
+  return withAuth(req, async (req, { userId }) => {
     const body = await req.json();
     const parsed = vendorSchema.parse(body);
-    const vendor = await prisma.vendor.create({ data: parsed });
+    
+    const wedding = await prisma.wedding.findFirst({ where: { id: parsed.weddingId, userId } });
+    if (!wedding) return apiError("Not found", 404);
+const vendor = await prisma.vendor.create({ data: parsed });
     return apiSuccess(vendor, 201);
   });
 }

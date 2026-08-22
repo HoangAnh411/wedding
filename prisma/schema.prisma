@@ -34,6 +34,10 @@ model Wedding {
   title           String?
   groomName       String   @map("groom_name")
   brideName       String   @map("bride_name")
+  groomFatherName String?  @map("groom_father_name")
+  groomMotherName String?  @map("groom_mother_name")
+  brideFatherName String?  @map("bride_father_name")
+  brideMotherName String?  @map("bride_mother_name")
   weddingDate     DateTime? @map("wedding_date")
   engagementDate  DateTime? @map("engagement_date")
   ceremonyDate    DateTime? @map("ceremony_date")
@@ -88,7 +92,7 @@ model TimelineEvent {
   orderIndex      Int      @default(0) @map("order_index")
   createdAt       DateTime @default(now()) @map("created_at")
 
-  wedding Wedding @relation(fields: [weddingId], references: [id])
+  wedding Wedding @relation(fields: [weddingId], references: [id], onDelete: Cascade)
 
   @@index([weddingId])
   @@map("timeline_events")
@@ -106,7 +110,7 @@ model GiftTray {
   imageUrl    String? @map("image_url")
   createdAt   DateTime @default(now()) @map("created_at")
 
-  wedding Wedding @relation(fields: [weddingId], references: [id])
+  wedding Wedding @relation(fields: [weddingId], references: [id], onDelete: Cascade)
 
   @@map("gift_trays")
 }
@@ -125,7 +129,7 @@ model GalleryImage {
   orderIndex   Int      @default(0) @map("order_index")
   createdAt    DateTime @default(now()) @map("created_at")
 
-  wedding Wedding @relation(fields: [weddingId], references: [id])
+  wedding Wedding @relation(fields: [weddingId], references: [id], onDelete: Cascade)
 
   @@index([weddingId])
   @@map("gallery_images")
@@ -144,7 +148,7 @@ model MusicTrack {
   isDefault Boolean  @default(false) @map("is_default")
   createdAt DateTime @default(now()) @map("created_at")
 
-  wedding Wedding @relation(fields: [weddingId], references: [id])
+  wedding Wedding @relation(fields: [weddingId], references: [id], onDelete: Cascade)
 
   @@index([weddingId])
   @@map("music_tracks")
@@ -177,7 +181,7 @@ model Guest {
   createdAt           DateTime  @default(now()) @map("created_at")
   updatedAt           DateTime  @updatedAt @map("updated_at")
 
-  wedding Wedding @relation(fields: [weddingId], references: [id])
+  wedding Wedding @relation(fields: [weddingId], references: [id], onDelete: Cascade)
   rsvpResponses RsvpResponse[]
   checkIns      CheckIn[]
 
@@ -201,8 +205,8 @@ model RsvpResponse {
   message             String?
   respondedAt         DateTime @default(now()) @map("responded_at")
 
-  wedding Wedding @relation(fields: [weddingId], references: [id])
-  guest   Guest   @relation(fields: [guestId], references: [id])
+  wedding Wedding @relation(fields: [weddingId], references: [id], onDelete: Cascade)
+  guest   Guest   @relation(fields: [guestId], references: [id], onDelete: Cascade)
 
   @@index([weddingId])
   @@index([guestId])
@@ -222,7 +226,7 @@ model Wish {
   isFeatured  Boolean  @default(false) @map("is_featured")
   createdAt   DateTime @default(now()) @map("created_at")
 
-  wedding Wedding @relation(fields: [weddingId], references: [id])
+  wedding Wedding @relation(fields: [weddingId], references: [id], onDelete: Cascade)
 
   @@index([weddingId])
   @@index([weddingId, isApproved])
@@ -240,8 +244,8 @@ model CheckIn {
   checkInBy   String?  @map("check_in_by")
   notes       String?
 
-  wedding Wedding @relation(fields: [weddingId], references: [id])
-  guest   Guest   @relation(fields: [guestId], references: [id])
+  wedding Wedding @relation(fields: [weddingId], references: [id], onDelete: Cascade)
+  guest   Guest   @relation(fields: [guestId], references: [id], onDelete: Cascade)
 
   @@index([weddingId])
   @@index([guestId])
@@ -272,7 +276,7 @@ model Vendor {
   createdAt         DateTime @default(now()) @map("created_at")
   updatedAt         DateTime @updatedAt @map("updated_at")
 
-  wedding     Wedding      @relation(fields: [weddingId], references: [id])
+  wedding     Wedding      @relation(fields: [weddingId], references: [id], onDelete: Cascade)
   budgetItems BudgetItem[]
 
   @@index([weddingId])
@@ -300,7 +304,7 @@ model ChecklistItem {
   createdAt        DateTime  @default(now()) @map("created_at")
   updatedAt        DateTime  @updatedAt @map("updated_at")
 
-  wedding Wedding @relation(fields: [weddingId], references: [id])
+  wedding Wedding @relation(fields: [weddingId], references: [id], onDelete: Cascade)
 
   @@index([weddingId])
   @@index([weddingId, phase])
@@ -325,8 +329,8 @@ model BudgetItem {
   createdAt     DateTime @default(now()) @map("created_at")
   updatedAt     DateTime @updatedAt @map("updated_at")
 
-  wedding Wedding @relation(fields: [weddingId], references: [id])
-  vendor  Vendor?  @relation(fields: [vendorId], references: [id])
+  wedding Wedding @relation(fields: [weddingId], references: [id], onDelete: Cascade)
+  vendor  Vendor?  @relation(fields: [vendorId], references: [id], onDelete: SetNull)
 
   @@index([weddingId])
   @@index([weddingId, category])
@@ -346,9 +350,10 @@ model Table {
   isHeadTable         Boolean @default(false) @map("is_head_table")
   createdAt           DateTime @default(now()) @map("created_at")
 
-  wedding Wedding @relation(fields: [weddingId], references: [id])
+  wedding Wedding @relation(fields: [weddingId], references: [id], onDelete: Cascade)
 
   @@index([weddingId])
+  @@unique([weddingId, tableNumber])
   @@map("tables")
 }
 
@@ -368,7 +373,7 @@ model MoneyGift {
   isConfirmed   Boolean   @default(false) @map("is_confirmed")
   createdAt     DateTime  @default(now()) @map("created_at")
 
-  wedding Wedding @relation(fields: [weddingId], references: [id])
+  wedding Wedding @relation(fields: [weddingId], references: [id], onDelete: Cascade)
 
   @@index([weddingId])
   @@map("money_gifts")
@@ -388,7 +393,8 @@ model PaymentConfig {
   isActive       Boolean @default(true) @map("is_active")
   createdAt      DateTime @default(now()) @map("created_at")
 
-  wedding Wedding @relation(fields: [weddingId], references: [id])
+  wedding Wedding @relation(fields: [weddingId], references: [id], onDelete: Cascade)
 
+  @@unique([weddingId, gatewayType])
   @@map("payment_configs")
 }

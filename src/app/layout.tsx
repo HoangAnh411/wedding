@@ -1,9 +1,15 @@
 import type { Metadata } from "next";
-import { Be_Vietnam_Pro } from "next/font/google";
+import { Outfit, Cormorant_Garamond } from "next/font/google";
 import "./globals.css";
 
-const beVietnamPro = Be_Vietnam_Pro({
-  variable: "--font-be-vietnam-pro",
+const outfit = Outfit({
+  variable: "--font-outfit",
+  subsets: ["latin"],
+  display: "swap",
+});
+
+const cormorantGaramond = Cormorant_Garamond({
+  variable: "--font-cormorant-garamond",
   subsets: ["vietnamese", "latin"],
   weight: ["300", "400", "500", "600", "700"],
   display: "swap",
@@ -20,7 +26,7 @@ export default function RootLayout({
   return (
     <html
       lang="vi"
-      className={`${beVietnamPro.variable} h-full antialiased`}
+      className={`${outfit.variable} ${cormorantGaramond.variable} h-full antialiased`}
     >
       <body className="min-h-full font-sans">{children}</body>
     </html>
