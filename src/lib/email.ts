@@ -154,3 +154,53 @@ function getInvitationEmailTemplate(data: {
 </body>
 </html>`;
 }
+
+export async function sendAccountEmail(email: string, password: string, weddingTitle: string): Promise<EmailSendResult> {
+  const hasSmtpConfig = process.env.MAIL_HOST && process.env.MAIL_USERNAME && process.env.MAIL_PASSWORD;
+
+  if (!hasSmtpConfig) {
+    return {
+      success: false,
+      message: "SMTP chưa được cấu hình.",
+    };
+  }
+
+  const loginUrl = process.env.AUTH_URL || process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+  
+  const html = `
+    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #eee; border-radius: 10px;">
+      <h2 style="color: #e11d48; text-align: center;">Chào mừng đến với hệ thống quản lý Đám Cưới</h2>
+      <p>Xin chào,</p>
+      <p>Tài khoản của bạn đã được tạo thành công cho đám cưới: <strong>${weddingTitle}</strong>.</p>
+      <p>Dưới đây là thông tin đăng nhập của bạn:</p>
+      <div style="background-color: #f9fafb; padding: 15px; border-radius: 5px; margin: 20px 0;">
+        <p style="margin: 5px 0;"><strong>Đường dẫn:</strong> <a href="${loginUrl}" style="color: #e11d48;">${loginUrl}</a></p>
+        <p style="margin: 5px 0;"><strong>Email:</strong> ${email}</p>
+        <p style="margin: 5px 0;"><strong>Mật khẩu:</strong> ${password}</p>
+      </div>
+      <p>Vui lòng đăng nhập và đổi mật khẩu trong phần cài đặt tài khoản để đảm bảo tính bảo mật.</p>
+      <p>Trân trọng,<br/>Đội ngũ Hỗ trợ</p>
+    </div>
+  `;
+
+  try {
+    const transporter = getTransporter();
+    const info = await transporter.sendMail({
+      from: getFromAddress(),
+      to: email,
+      subject: 'Thông tin tài khoản quản lý đám cưới của bạn',
+      html: html,
+    });
+
+    return {
+      success: true,
+      message: "Gửi email thành công",
+      data: info,
+    };
+  } catch (error) {
+    return {
+      success: false,
+      message: `Lỗi gửi email: ${error instanceof Error ? error.message : "Unknown error"}`,
+    };
+  }
+}

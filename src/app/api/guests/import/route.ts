@@ -1,10 +1,10 @@
 import { NextRequest } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { withAuth, apiSuccess, apiError } from "@/lib/api-helper";
+import { withAuth, apiSuccess, apiError, verifyWeddingOwnership } from "@/lib/api-helper";
 import * as XLSX from "xlsx";
 
 export async function POST(req: NextRequest) {
-  return withAuth(req, async (req, { userId }) => {
+  return withAuth(req, async (req, { userId, role }) => {
     try {
       const formData = await req.formData();
       const file = formData.get("file") as File | null;
@@ -14,10 +14,7 @@ export async function POST(req: NextRequest) {
         return apiError("Thiếu file hoặc weddingId", 400);
       }
 
-      const wedding = await prisma.wedding.findFirst({
-        where: { id: weddingId, userId },
-      });
-      if (!wedding) {
+      if (!(await verifyWeddingOwnership(weddingId, userId, role))) {
         return apiError("Không tìm thấy đám cưới", 404);
       }
 

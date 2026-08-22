@@ -25,7 +25,7 @@ export default function WeddingsClient({
 }) {
   const [weddings, setWeddings] = useState(initialWeddings);
   const [showCreate, setShowCreate] = useState(false);
-  const [form, setForm] = useState({ groomName: "", brideName: "", weddingDate: "", venueName: "" });
+  const [form, setForm] = useState({ groomName: "", brideName: "", weddingDate: "", venueName: "", clientEmail: "" });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -43,7 +43,7 @@ export default function WeddingsClient({
       const { data } = await res.json();
       setWeddings((prev) => [data, ...prev]);
       setShowCreate(false);
-      setForm({ groomName: "", brideName: "", weddingDate: "", venueName: "" });
+      setForm({ groomName: "", brideName: "", weddingDate: "", venueName: "", clientEmail: "" });
     } catch {
       setError("Có lỗi xảy ra");
     }
@@ -142,6 +142,14 @@ export default function WeddingsClient({
                   onChange={(e) => setForm({ ...form, venueName: e.target.value })}
                   className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-rose-500 focus:outline-none focus:ring-1 focus:ring-rose-500"
                   placeholder="Tên nhà hàng / khách sạn" />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700">Email nhận tài khoản (Tùy chọn)</label>
+                <input type="email" value={form.clientEmail}
+                  onChange={(e) => setForm({ ...form, clientEmail: e.target.value })}
+                  className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-rose-500 focus:outline-none focus:ring-1 focus:ring-rose-500"
+                  placeholder="email@example.com" />
+                <p className="mt-1 text-xs text-gray-500">Nếu nhập, hệ thống sẽ tự động tạo tài khoản và gửi email cho người dùng.</p>
               </div>
               <div className="flex justify-end gap-3">
                 <button type="button" onClick={() => setShowCreate(false)}

@@ -19,5 +19,5 @@ export default async function SettingsPage({
 
   if (!wedding) redirect("/admin");
 
-  return <SettingsClient wedding={wedding} />;
+  return <SettingsClient wedding={wedding} userRole={session.user.role} />;
 }

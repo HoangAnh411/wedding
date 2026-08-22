@@ -5,7 +5,7 @@ import { Prisma } from '@prisma/client';
 import { prisma } from '@/lib/prisma';
 import { logger } from '@/lib/logger';
 
-export type ApiHandler = (req: Request, context: { userId: string }) => Promise<NextResponse>;
+export type ApiHandler = (req: Request, context: { userId: string; role: string }) => Promise<NextResponse>;
 
 export async function withAuth(
   req: Request,
@@ -17,7 +17,7 @@ export async function withAuth(
   }
   
   try {
-    return await handler(req, { userId: session.user.id });
+    return await handler(req, { userId: session.user.id, role: session.user.role || "SUPERADMIN" });
   } catch (error) {
     if (error instanceof ZodError) {
       return NextResponse.json({ error: 'Validation error', details: error.issues }, { status: 400 });
@@ -33,9 +33,18 @@ export async function withAuth(
   }
 }
 
-export async function verifyWeddingOwnership(weddingId: string, userId: string): Promise<boolean> {
+export async function verifyWeddingOwnership(weddingId: string, userId: string, role?: string): Promise<boolean> {
+  if (role === "SUPERADMIN") return true;
+
   const wedding = await prisma.wedding.findFirst({
-    where: { id: weddingId, userId },
+    where: {
+      id: weddingId,
+      OR: [
+        { userId },
+        { clientId: userId },
+        { assignments: { some: { staffId: userId } } }
+      ]
+    },
     select: { id: true },
   });
   return !!wedding;

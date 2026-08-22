@@ -1,10 +1,10 @@
 import { NextRequest } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { withAuth, apiSuccess, apiError } from "@/lib/api-helper";
+import { withAuth, apiSuccess, apiError, verifyWeddingOwnership } from "@/lib/api-helper";
 import { sendInvitationEmail } from "@/lib/email";
 
 export async function POST(req: NextRequest) {
-  return withAuth(req, async (req, { userId }) => {
+  return withAuth(req, async (req, { userId, role }) => {
     try {
       const { weddingId, guestIds } = await req.json();
 
@@ -12,8 +12,12 @@ export async function POST(req: NextRequest) {
         return apiError("Thiếu weddingId", 400);
       }
 
-      const wedding = await prisma.wedding.findFirst({
-        where: { id: weddingId, userId },
+      if (!(await verifyWeddingOwnership(weddingId, userId, role))) {
+        return apiError("Không tìm thấy đám cưới", 404);
+      }
+      
+      const wedding = await prisma.wedding.findUnique({
+        where: { id: weddingId },
       });
       if (!wedding) {
         return apiError("Không tìm thấy đám cưới", 404);

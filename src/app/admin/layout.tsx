@@ -44,15 +44,22 @@ function AdminLayoutInner({ children }: { children: React.ReactNode }) {
       { label: "Lời chúc", href: `/admin/weddings/${weddingId}/wishes`, icon: "💌" },
       { label: "Mừng cưới", href: `/admin/weddings/${weddingId}/money-gifts`, icon: "🎁" },
       { label: "Check-in", href: `/admin/weddings/${weddingId}/checkin`, icon: "📷" },
-      { label: "Cài đặt", href: `/admin/weddings/${weddingId}/settings`, icon: "⚙️" },
     ];
+    if (session?.user?.role !== "CLIENT") {
+      navItems.push({ label: "Cài đặt", href: `/admin/weddings/${weddingId}/settings`, icon: "⚙️" });
+    }
   } else {
     navItems = [
       { label: "Đám cưới của tôi", href: "/admin", icon: "💒" },
-      { label: "Tài chính", href: "/admin/payments", icon: "💳" },
-      { label: "Nhà cung cấp", href: "/admin/vendors", icon: "🤝" },
-      { label: "Cài đặt", href: "/admin/settings", icon: "⚙️" },
     ];
+    if (session?.user?.role === "SUPERADMIN") {
+      navItems.push(
+        { label: "Tài chính", href: "/admin/payments", icon: "💳" },
+        { label: "Nhà cung cấp", href: "/admin/vendors", icon: "🤝" },
+        { label: "Nhân sự", href: "/admin/staff", icon: "👔" },
+        { label: "Cài đặt", href: "/admin/settings", icon: "⚙️" }
+      );
+    }
   }
 
   return (

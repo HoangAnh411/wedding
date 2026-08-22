@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { withAuth, apiSuccess, apiError } from "@/lib/api-helper";
+import { withAuth, apiSuccess, apiError, verifyWeddingOwnership } from "@/lib/api-helper";
 import { rateLimit } from "@/lib/rate-limit";
 
 export async function POST(request: NextRequest) {
@@ -74,12 +74,16 @@ export async function POST(request: NextRequest) {
 }
 
 export async function GET(request: NextRequest) {
-  return withAuth(request, async () => {
+  return withAuth(request, async (req, { userId, role }) => {
     const { searchParams } = new URL(request.url);
     const weddingId = searchParams.get("weddingId");
 
     if (!weddingId) {
       return apiError("Thiếu weddingId", 400);
+    }
+
+    if (!(await verifyWeddingOwnership(weddingId, userId, role))) {
+      return apiError("Unauthorized", 403);
     }
 
     try {

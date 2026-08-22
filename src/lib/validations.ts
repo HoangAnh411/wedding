@@ -30,6 +30,7 @@ export const weddingSchema = z.object({
   rsvpEnabled: z.boolean().optional(),
   wishesEnabled: z.boolean().optional(),
   isTemplate: z.boolean().optional(),
+  clientEmail: z.string().email("Email không hợp lệ").optional().or(z.literal("")),
 });
 
 // ============================================================

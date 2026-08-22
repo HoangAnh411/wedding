@@ -11,10 +11,14 @@ interface WeddingSettings {
   wishesEnabled: boolean;
 }
 
+import StaffAssignment from "./staff-assignment";
+
 export default function SettingsClient({
   wedding: initialWedding,
+  userRole,
 }: {
   wedding: WeddingSettings;
+  userRole?: string;
 }) {
   const [wedding, setWedding] = useState(initialWedding);
   const [loading, setLoading] = useState(false);
@@ -131,6 +135,10 @@ export default function SettingsClient({
           />
         </div>
       </div>
+
+      {userRole === "SUPERADMIN" && (
+        <StaffAssignment weddingId={wedding.id} />
+      )}
     </div>
   );
 }

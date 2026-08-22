@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { withAuth, apiSuccess, apiError } from "@/lib/api-helper";
+import { withAuth, apiSuccess, apiError, verifyWeddingOwnership } from "@/lib/api-helper";
 import { z } from "zod";
 
 const rateLimit = new Map<string, number>();
@@ -78,13 +78,20 @@ export async function GET(request: NextRequest) {
 }
 
 export async function PUT(request: NextRequest) {
-  return withAuth(request, async () => {
+  return withAuth(request, async (req, { userId, role }) => {
     try {
       const body = await request.json();
       const { id, isApproved } = body;
 
       if (!id) {
         return apiError("Thiếu id", 400);
+      }
+
+      const existing = await prisma.wish.findUnique({ where: { id } });
+      if (!existing) return apiError("Not found", 404);
+
+      if (!(await verifyWeddingOwnership(existing.weddingId, userId, role))) {
+        return apiError("Unauthorized", 403);
       }
 
       const wish = await prisma.wish.update({
