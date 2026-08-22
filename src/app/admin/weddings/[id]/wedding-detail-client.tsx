@@ -64,28 +64,25 @@ export default function WeddingDetailClient({ wedding }: { wedding: WeddingDetai
   return (
     <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500 ease-out">
       {/* Header Section */}
-      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-rose-500 via-rose-600 to-pink-600 p-8 md:p-10 text-white shadow-xl">
-        <div className="absolute -right-20 -top-20 h-96 w-96 rounded-full bg-white opacity-10 blur-3xl"></div>
-        <div className="absolute -bottom-20 -left-20 h-96 w-96 rounded-full bg-rose-400 opacity-20 blur-3xl"></div>
-        
+      <div className="relative overflow-hidden rounded-2xl bg-white p-8 md:p-10 shadow-sm border border-gray-200">
         <div className="relative z-10">
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
             <div>
-              <p className="text-rose-100 font-medium tracking-wider text-sm uppercase mb-2">Đám cưới của</p>
-              <h1 className="font-serif text-4xl md:text-5xl font-bold mb-6 drop-shadow-md">
-                {wedding.groomName} <span className="text-rose-200 font-light">&</span> {wedding.brideName}
+              <p className="text-gray-500 font-semibold tracking-wider text-xs uppercase mb-2">Quản lý Đám cưới</p>
+              <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6 tracking-tight">
+                {wedding.groomName} & {wedding.brideName}
               </h1>
               
-              <div className="flex flex-wrap gap-4 text-sm font-medium">
-                <div className="flex items-center gap-2 bg-white/20 backdrop-blur-sm rounded-full px-4 py-2 border border-white/20">
-                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <div className="flex flex-wrap gap-4 text-sm font-medium text-gray-600">
+                <div className="flex items-center gap-2 bg-gray-50 rounded-lg px-4 py-2 border border-gray-100">
+                  <svg className="w-4 h-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                   </svg>
                   {wedding.weddingDate ? new Date(wedding.weddingDate).toLocaleDateString("vi-VN") : "Chưa xác định"}
                 </div>
                 {wedding.venueName && (
-                  <div className="flex items-center gap-2 bg-white/20 backdrop-blur-sm rounded-full px-4 py-2 border border-white/20">
-                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <div className="flex items-center gap-2 bg-gray-50 rounded-lg px-4 py-2 border border-gray-100">
+                    <svg className="w-4 h-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.243-4.243a8 8 0 1111.314 0z" />
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                     </svg>
@@ -98,7 +95,7 @@ export default function WeddingDetailClient({ wedding }: { wedding: WeddingDetai
             <div className="flex flex-wrap gap-3">
               <button 
                 onClick={copyToClipboard}
-                className="flex items-center gap-2 rounded-xl bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/20 px-5 py-3 text-sm font-semibold transition-all duration-300"
+                className="flex items-center gap-2 rounded-lg bg-white border border-gray-300 hover:bg-gray-50 px-5 py-2.5 text-sm font-semibold text-gray-700 shadow-sm transition-all duration-200"
               >
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
@@ -108,7 +105,7 @@ export default function WeddingDetailClient({ wedding }: { wedding: WeddingDetai
               <button 
                 onClick={handleSendAllEmail}
                 disabled={sendingEmail}
-                className="flex items-center gap-2 rounded-xl bg-white text-rose-600 hover:bg-rose-50 px-5 py-3 text-sm font-bold shadow-sm transition-all duration-300 disabled:opacity-70"
+                className="flex items-center gap-2 rounded-lg bg-gray-900 text-white hover:bg-gray-800 px-5 py-2.5 text-sm font-semibold shadow-sm transition-all duration-200 disabled:opacity-70"
               >
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
