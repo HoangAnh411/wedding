@@ -20,7 +20,7 @@ function pushDb() {
   console.log('Đang chạy Prisma DB Push với DIRECT_URL tự động tạo...');
   
   try {
-    execSync('npx prisma db push', {
+    execSync('npx prisma db push --accept-data-loss', {
       stdio: 'inherit',
       env: {
         ...process.env,
