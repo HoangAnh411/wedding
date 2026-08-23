@@ -1,4 +1,5 @@
 const { execSync } = require('child_process');
+require('dotenv').config();
 
 function pushDb() {
   const dbUrl = process.env.DATABASE_URL;
