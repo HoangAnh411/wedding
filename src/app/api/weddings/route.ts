@@ -62,8 +62,16 @@ export async function POST(req: NextRequest) {
       }
     }
 
+    const dataToSave: any = { ...weddingData, slug, userId, clientId };
+    
+    // Xử lý chuỗi rỗng cho các trường DateTime để tránh lỗi Prisma
+    if (dataToSave.weddingDate === "") dataToSave.weddingDate = null;
+    if (dataToSave.engagementDate === "") dataToSave.engagementDate = null;
+    if (dataToSave.ceremonyDate === "") dataToSave.ceremonyDate = null;
+    if (dataToSave.receptionDate === "") dataToSave.receptionDate = null;
+
     const wedding = await prisma.wedding.create({
-      data: { ...weddingData, slug, userId, clientId },
+      data: dataToSave,
     });
     
     return apiSuccess(wedding, 201);

@@ -28,7 +28,14 @@ export async function PUT(req: Request, { params }: { params: Promise<{ id: stri
       return apiError("Không có quyền chỉnh sửa", 403);
     }
     const body = await req.json();
-    const parsed = weddingSchema.partial().parse(body);
+    const parsed: any = weddingSchema.partial().parse(body);
+    
+    // Xử lý chuỗi rỗng cho các trường DateTime để tránh lỗi Prisma
+    if (parsed.weddingDate === "") parsed.weddingDate = null;
+    if (parsed.engagementDate === "") parsed.engagementDate = null;
+    if (parsed.ceremonyDate === "") parsed.ceremonyDate = null;
+    if (parsed.receptionDate === "") parsed.receptionDate = null;
+
     const wedding = await prisma.wedding.update({ where: { id }, data: parsed });
     return apiSuccess(wedding);
   });
