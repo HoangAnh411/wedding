@@ -1,11 +1,14 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { withAuth, apiSuccess, apiError } from "@/lib/api-helper";
+import { withAuth, apiSuccess, apiError, verifyWeddingOwnership } from "@/lib/api-helper";
 import { weddingSchema } from "@/lib/validations";
 
 export async function GET(req: Request, { params }: { params: Promise<{ id: string }> }) {
-  return withAuth(req, async () => {
+  return withAuth(req, async (req, { userId, role }) => {
     const { id } = await params;
+    if (!(await verifyWeddingOwnership(id, userId, role))) {
+      return apiError("Không có quyền truy cập", 403);
+    }
     const wedding = await prisma.wedding.findUnique({
       where: { id },
       include: {
@@ -19,8 +22,11 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
 }
 
 export async function PUT(req: Request, { params }: { params: Promise<{ id: string }> }) {
-  return withAuth(req, async () => {
+  return withAuth(req, async (req, { userId, role }) => {
     const { id } = await params;
+    if (!(await verifyWeddingOwnership(id, userId, role))) {
+      return apiError("Không có quyền chỉnh sửa", 403);
+    }
     const body = await req.json();
     const parsed = weddingSchema.partial().parse(body);
     const wedding = await prisma.wedding.update({ where: { id }, data: parsed });
@@ -29,8 +35,11 @@ export async function PUT(req: Request, { params }: { params: Promise<{ id: stri
 }
 
 export async function DELETE(req: Request, { params }: { params: Promise<{ id: string }> }) {
-  return withAuth(req, async () => {
+  return withAuth(req, async (req, { userId, role }) => {
     const { id } = await params;
+    if (!(await verifyWeddingOwnership(id, userId, role))) {
+      return apiError("Không có quyền xóa", 403);
+    }
     await prisma.wedding.delete({ where: { id } });
     return apiSuccess({ deleted: true });
   });

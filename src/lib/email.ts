@@ -254,3 +254,128 @@ export async function sendStaffAccountEmail(email: string, password: string, nam
     };
   }
 }
+
+export async function sendThankYouEmail(
+  to: string,
+  data: {
+    guestName: string;
+    groomName: string;
+    brideName: string;
+    galleryUrl: string;
+  }
+): Promise<EmailSendResult> {
+  const hasSmtpConfig = process.env.MAIL_HOST && process.env.MAIL_USERNAME && process.env.MAIL_PASSWORD;
+
+  if (!hasSmtpConfig) {
+    return {
+      success: false,
+      message: "SMTP chưa được cấu hình.",
+    };
+  }
+
+  const html = `
+    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #eee; border-radius: 10px;">
+      <h2 style="color: #e11d48; text-align: center;">Chân thành cảm ơn!</h2>
+      <p>Thân gửi ${data.guestName},</p>
+      <p>Sự hiện diện của bạn là món quà vô giá, góp phần làm cho ngày vui của <strong>${data.groomName} & ${data.brideName}</strong> thêm trọn vẹn và ý nghĩa.</p>
+      
+      <p>Gia đình chúng tôi xin gửi lời cảm ơn chân thành và sâu sắc nhất đến bạn. Chúc bạn cùng gia đình luôn mạnh khỏe, hạnh phúc và thành công.</p>
+      
+      <div style="background-color: #f9fafb; padding: 15px; border-radius: 5px; margin: 20px 0; text-align: center;">
+        <p>Để lưu lại những khoảnh khắc tuyệt vời trong ngày cưới, mời bạn xem album ảnh tại đây:</p>
+        <p style="margin: 20px 0;">
+          <a href="${data.galleryUrl}" style="background-color: #e11d48; color: white; padding: 12px 24px; text-decoration: none; border-radius: 5px; font-weight: bold;">Xem Album Ảnh</a>
+        </p>
+      </div>
+      
+      <p>Trân trọng,<br/>${data.groomName} & ${data.brideName}</p>
+    </div>
+  `;
+
+  try {
+    const transporter = getTransporter();
+    const info = await transporter.sendMail({
+      from: getFromAddress(),
+      to,
+      subject: `[Cảm ơn] Từ ${data.groomName} & ${data.brideName}`,
+      html,
+    });
+
+    return {
+      success: true,
+      message: "Gửi email thành công",
+      data: info,
+    };
+  } catch (error) {
+    return {
+      success: false,
+      message: `Lỗi gửi email: ${error instanceof Error ? error.message : "Unknown error"}`,
+    };
+  }
+}
+
+export async function sendRsvpConfirmationEmail(
+  to: string,
+  data: {
+    guestName: string;
+    groomName: string;
+    brideName: string;
+    weddingDate: string;
+    venueName: string;
+    isAttending: boolean;
+    invitationUrl: string;
+  }
+): Promise<EmailSendResult> {
+  const hasSmtpConfig = process.env.MAIL_HOST && process.env.MAIL_USERNAME && process.env.MAIL_PASSWORD;
+
+  if (!hasSmtpConfig) {
+    return {
+      success: false,
+      message: "SMTP chưa được cấu hình.",
+    };
+  }
+
+  const html = `
+    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #eee; border-radius: 10px;">
+      <h2 style="color: #e11d48; text-align: center;">Cảm ơn bạn đã xác nhận tham dự!</h2>
+      <p>Xin chào ${data.guestName},</p>
+      <p>Chúng tôi đã nhận được phản hồi RSVP của bạn cho lễ cưới của <strong>${data.groomName} & ${data.brideName}</strong>.</p>
+      
+      <div style="background-color: #f9fafb; padding: 15px; border-radius: 5px; margin: 20px 0; border-left: 4px solid ${data.isAttending ? '#10b981' : '#f43f5e'};">
+        <p style="margin: 5px 0;"><strong>Trạng thái:</strong> ${data.isAttending ? 'Sẽ tham dự ✅' : 'Không thể tham dự ❌'}</p>
+        ${data.isAttending ? `
+          <p style="margin: 5px 0;"><strong>Thời gian:</strong> ${data.weddingDate}</p>
+          <p style="margin: 5px 0;"><strong>Địa điểm:</strong> ${data.venueName}</p>
+        ` : ''}
+      </div>
+      
+      <p>Bạn có thể xem lại thông tin thiệp cưới tại đây:</p>
+      <p style="text-align: center; margin: 20px 0;">
+        <a href="${data.invitationUrl}" style="background-color: #e11d48; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; font-weight: bold;">Xem thiệp cưới</a>
+      </p>
+      
+      <p>Trân trọng,<br/>Gia đình hai bên</p>
+    </div>
+  `;
+
+  try {
+    const transporter = getTransporter();
+    const info = await transporter.sendMail({
+      from: getFromAddress(),
+      to,
+      subject: `[Xác nhận RSVP] Đám cưới ${data.groomName} & ${data.brideName}`,
+      html,
+    });
+
+    return {
+      success: true,
+      message: "Gửi email thành công",
+      data: info,
+    };
+  } catch (error) {
+    return {
+      success: false,
+      message: `Lỗi gửi email: ${error instanceof Error ? error.message : "Unknown error"}`,
+    };
+  }
+}

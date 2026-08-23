@@ -45,8 +45,9 @@ export default async function PublicInvitationPage({
       galleryImages: { orderBy: { orderIndex: "asc" } },
       musicTracks: { where: { isDefault: true } },
       wishes: { where: { isApproved: true }, orderBy: { createdAt: "desc" }, take: 20 },
+      paymentConfigs: { where: { isActive: true } },
       user: {
-        include: { paymentConfigs: { where: { isActive: true } } }
+        include: { paymentConfigs: { where: { isActive: true, weddingId: null } } }
       },
     },
   });
@@ -55,8 +56,29 @@ export default async function PublicInvitationPage({
     notFound();
   }
 
+  // Analytics: Tăng lượt xem (không await để không làm chậm page load)
+  prisma.wedding.update({
+    where: { id: wedding.id },
+    data: { viewCount: { increment: 1 } }
+  }).catch(() => {});
+
   const serialized = {
     ...wedding,
+    password: null, // Không truyền password thật xuống client
+    hasPassword: !!wedding.password,
+    theme: wedding.theme || "modern",
+    primaryColor: wedding.primaryColor || "#e11d48",
+    layoutConfig: (() => {
+      const allSections = ["hero", "countdown", "story", "events", "dresscode", "travel", "faqs", "gallery", "rsvp", "wishes", "map", "payment"];
+      const current = Array.isArray(wedding.layoutConfig) && wedding.layoutConfig.length > 0 
+        ? (wedding.layoutConfig as { id: string; visible: boolean }[])
+        : allSections.map(id => ({ id, visible: true }));
+      
+      const existingIds = new Set(current.map(c => c.id));
+      const missing = allSections.filter(id => !existingIds.has(id)).map(id => ({ id, visible: true }));
+      
+      return [...current, ...missing];
+    })(),
     weddingDate: wedding.weddingDate?.toISOString() || null,
     engagementDate: wedding.engagementDate?.toISOString() || null,
     ceremonyDate: wedding.ceremonyDate?.toISOString() || null,
@@ -80,7 +102,7 @@ export default async function PublicInvitationPage({
       ...w,
       createdAt: w.createdAt.toISOString(),
     })),
-    paymentConfigs: wedding.user.paymentConfigs.map((p) => ({
+    paymentConfigs: (wedding.paymentConfigs.length > 0 ? wedding.paymentConfigs : wedding.user.paymentConfigs).map((p) => ({
       ...p,
       createdAt: p.createdAt.toISOString(),
     })),
@@ -103,5 +125,29 @@ export default async function PublicInvitationPage({
     }
   }
 
-  return <InvitationClient wedding={serialized} guestInfo={guestInfo || undefined} />;
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Event",
+    "name": `Lễ Cưới ${wedding.groomName} & ${wedding.brideName}`,
+    "startDate": wedding.weddingDate ? wedding.weddingDate.toISOString() : undefined,
+    "location": {
+      "@type": "Place",
+      "name": wedding.venueName || "Việt Nam",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": wedding.venueAddress || "Việt Nam"
+      }
+    },
+    "description": `Lễ cưới của ${wedding.groomName} và ${wedding.brideName}`
+  };
+
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <InvitationClient wedding={serialized} guestInfo={guestInfo || undefined} />
+    </>
+  );
 }

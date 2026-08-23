@@ -22,6 +22,7 @@ export async function GET(req: NextRequest) {
     const [guests, total] = await Promise.all([
       prisma.guest.findMany({
         where,
+        include: { rsvpResponses: true },
         orderBy: { createdAt: "desc" },
         skip,
         take: limit,

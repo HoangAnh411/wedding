@@ -1,17 +1,15 @@
-import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { auth } from "@/lib/auth";
+import { withAuth, apiSuccess, apiError } from "@/lib/api-helper";
 
 export async function DELETE(
   req: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
-  const session = await auth();
-  if (session?.user?.role !== "SUPERADMIN") {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
-  }
+  return withAuth(req, async (req, { role }) => {
+    if (role !== "SUPERADMIN") {
+      return apiError("Chỉ SUPERADMIN mới có quyền", 403);
+    }
 
-  try {
     const { id } = await params;
 
     const user = await prisma.user.findUnique({
@@ -19,25 +17,17 @@ export async function DELETE(
     });
 
     if (!user) {
-      return NextResponse.json({ error: "User not found" }, { status: 404 });
+      return apiError("Không tìm thấy user", 404);
     }
 
     if (user.role !== "STAFF") {
-      return NextResponse.json(
-        { error: "Can only delete STAFF users" },
-        { status: 400 }
-      );
+      return apiError("Chỉ có thể xóa user STAFF", 400);
     }
 
     await prisma.user.delete({
       where: { id },
     });
 
-    return NextResponse.json({ success: true });
-  } catch (error) {
-    return NextResponse.json(
-      { error: "Failed to delete staff" },
-      { status: 500 }
-    );
-  }
+    return apiSuccess({ deleted: true });
+  });
 }

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Outfit, Cormorant_Garamond } from "next/font/google";
+import { Outfit, Cormorant_Garamond, Great_Vibes } from "next/font/google";
 import "./globals.css";
 
 const outfit = Outfit({
@@ -15,6 +15,13 @@ const cormorantGaramond = Cormorant_Garamond({
   display: "swap",
 });
 
+const greatVibes = Great_Vibes({
+  variable: "--font-great-vibes",
+  subsets: ["latin"],
+  weight: "400",
+  display: "swap",
+});
+
 export const metadata: Metadata = {
   title: "Thiệp Cưới Online - Wedding Invitation",
   description: "Gửi thiệp cưới online và quản lý đám cưới dễ dàng",
@@ -26,7 +33,7 @@ export default function RootLayout({
   return (
     <html
       lang="vi"
-      className={`${outfit.variable} ${cormorantGaramond.variable} h-full antialiased`}
+      className={`${outfit.variable} ${cormorantGaramond.variable} ${greatVibes.variable} h-full antialiased`}
     >
       <body className="min-h-full font-sans">{children}</body>
     </html>

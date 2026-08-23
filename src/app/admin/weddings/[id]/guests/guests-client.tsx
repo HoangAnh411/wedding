@@ -21,14 +21,22 @@ interface Guest {
   hasOpenedInvitation: boolean;
   rsvpAt: string | null;
   thankYouSent: boolean;
+  rsvpResponses?: {
+    id: string;
+    eventId: string | null;
+    isAttending: boolean;
+    guestCount: number;
+    message: string | null;
+  }[];
 }
 
 interface GuestsClientProps {
   guests: Guest[];
+  timelineEvents?: { id: string; name: string }[];
   weddingId: string;
 }
 
-export default function GuestsClient({ guests: initialGuests, weddingId }: GuestsClientProps) {
+export default function GuestsClient({ guests: initialGuests, timelineEvents = [], weddingId }: GuestsClientProps) {
   const [search, setSearch] = useState("");
   const [sideFilter, setSideFilter] = useState("Tất cả");
   const [groupFilter, setGroupFilter] = useState("Tất cả");
@@ -37,6 +45,10 @@ export default function GuestsClient({ guests: initialGuests, weddingId }: Guest
   const [importing, setImporting] = useState(false);
   const [importResult, setImportResult] = useState<{ imported: number; total: number; errors: { row: number; error: string }[] } | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const [showAddModal, setShowAddModal] = useState(false);
+  const [addForm, setAddForm] = useState({ name: "", familySide: "Nhà trai", groupName: "Gia đình", phone: "", email: "" });
+  const [addLoading, setAddLoading] = useState(false);
 
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
@@ -133,7 +145,59 @@ export default function GuestsClient({ guests: initialGuests, weddingId }: Guest
           >
             {importing ? "Đang import..." : "📥 Import Excel"}
           </button>
-          <button className="rounded-lg bg-rose-600 px-4 py-2 text-sm font-medium text-white shadow-sm transition hover:bg-rose-700">
+          
+          <button
+            onClick={async () => {
+              if (!confirm("Gửi email thiệp cưới cho tất cả khách CHƯA GỬI và có email?")) return;
+              try {
+                const res = await fetch("/api/guests/send-invitations", {
+                  method: "POST",
+                  headers: { "Content-Type": "application/json" },
+                  body: JSON.stringify({ weddingId }),
+                });
+                const json = await res.json();
+                if (json.success) {
+                  alert(`Đã gửi thành công ${json.data.sent} thiệp. Thất bại: ${json.data.failed}`);
+                } else {
+                  alert(json.error);
+                }
+              } catch (e) {
+                alert("Lỗi khi gửi email");
+              }
+            }}
+            className="rounded-lg border border-blue-200 bg-blue-50 px-4 py-2 text-sm font-medium text-blue-700 transition hover:bg-blue-100"
+          >
+            ✉️ Gửi Thiệp
+          </button>
+          
+          <button
+            onClick={async () => {
+              if (!confirm("Bạn có chắc chắn muốn gửi email cảm ơn đến TẤT CẢ khách mời Đã xác nhận tham dự?")) return;
+              try {
+                const res = await fetch("/api/guests/send-thank-you", {
+                  method: "POST",
+                  headers: { "Content-Type": "application/json" },
+                  body: JSON.stringify({ weddingId }),
+                });
+                const json = await res.json();
+                if (json.success) {
+                  alert(`Đã gửi thành công ${json.data.sent} email. Thất bại: ${json.data.failed}`);
+                } else {
+                  alert(json.error);
+                }
+              } catch (e) {
+                alert("Lỗi khi gửi email");
+              }
+            }}
+            className="rounded-lg border border-rose-200 bg-rose-50 px-4 py-2 text-sm font-medium text-rose-700 transition hover:bg-rose-100"
+          >
+            💌 Gửi email Cảm ơn
+          </button>
+
+          <button 
+            onClick={() => setShowAddModal(true)}
+            className="rounded-lg bg-rose-600 px-4 py-2 text-sm font-medium text-white shadow-sm transition hover:bg-rose-700"
+          >
             + Thêm khách
           </button>
         </div>
@@ -242,9 +306,23 @@ export default function GuestsClient({ guests: initialGuests, weddingId }: Guest
                 <td className="whitespace-nowrap px-4 py-3 text-sm text-gray-500">{g.phone || "-"}</td>
                 <td className="whitespace-nowrap px-4 py-3 text-sm text-gray-500">{g.tableNumber || "-"}</td>
                 <td className="whitespace-nowrap px-4 py-3">
-                  {g.isAttending === true && <span className="rounded-full bg-green-100 px-2 py-0.5 text-xs font-medium text-green-800">Đã xác nhận</span>}
-                  {g.isAttending === null && <span className="rounded-full bg-yellow-100 px-2 py-0.5 text-xs font-medium text-yellow-800">Chờ</span>}
-                  {g.isAttending === false && <span className="rounded-full bg-red-100 px-2 py-0.5 text-xs font-medium text-red-800">Từ chối</span>}
+                  {timelineEvents.length > 0 ? (
+                    <div className="flex flex-col gap-1">
+                      {timelineEvents.map(ev => {
+                        const r = g.rsvpResponses?.find(res => res.eventId === ev.id);
+                        if (!r) return <span key={ev.id} className="text-xs text-gray-500">• {ev.name}: <span className="text-yellow-600">Chờ</span></span>;
+                        return r.isAttending ? 
+                          <span key={ev.id} className="text-xs font-medium text-green-700">• {ev.name}: Đi ({r.guestCount})</span> : 
+                          <span key={ev.id} className="text-xs text-red-600">• {ev.name}: Từ chối</span>;
+                      })}
+                    </div>
+                  ) : (
+                    <>
+                      {g.isAttending === true && <span className="rounded-full bg-green-100 px-2 py-0.5 text-xs font-medium text-green-800">Đã xác nhận</span>}
+                      {g.isAttending === null && <span className="rounded-full bg-yellow-100 px-2 py-0.5 text-xs font-medium text-yellow-800">Chờ</span>}
+                      {g.isAttending === false && <span className="rounded-full bg-red-100 px-2 py-0.5 text-xs font-medium text-red-800">Từ chối</span>}
+                    </>
+                  )}
                 </td>
                 <td className="whitespace-nowrap px-4 py-3">
                   {g.hasSentInvitation ? (
@@ -283,6 +361,88 @@ export default function GuestsClient({ guests: initialGuests, weddingId }: Guest
           >
             Sau
           </button>
+        </div>
+      )}
+
+      {/* Modal Thêm Khách */}
+      {showAddModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+          <div className="w-full max-w-md rounded-2xl bg-white p-6 shadow-xl">
+            <h3 className="text-lg font-bold text-gray-900 mb-4">Thêm khách mời mới</h3>
+            <div className="space-y-4">
+              <div>
+                <label className="mb-1 block text-sm font-medium text-gray-700">Tên khách mời *</label>
+                <input type="text" className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-rose-500 focus:outline-none"
+                  value={addForm.name} onChange={e => setAddForm({...addForm, name: e.target.value})} />
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="mb-1 block text-sm font-medium text-gray-700">Phân loại</label>
+                  <select className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-rose-500 focus:outline-none"
+                    value={addForm.familySide} onChange={e => setAddForm({...addForm, familySide: e.target.value})}>
+                    <option value="Nhà trai">Nhà trai</option>
+                    <option value="Nhà gái">Nhà gái</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="mb-1 block text-sm font-medium text-gray-700">Nhóm</label>
+                  <select className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-rose-500 focus:outline-none"
+                    value={addForm.groupName} onChange={e => setAddForm({...addForm, groupName: e.target.value})}>
+                    <option value="Gia đình">Gia đình</option>
+                    <option value="Bạn bè">Bạn bè</option>
+                    <option value="Đồng nghiệp">Đồng nghiệp</option>
+                    <option value="Khác">Khác</option>
+                  </select>
+                </div>
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="mb-1 block text-sm font-medium text-gray-700">Số điện thoại</label>
+                  <input type="text" className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-rose-500 focus:outline-none"
+                    value={addForm.phone} onChange={e => setAddForm({...addForm, phone: e.target.value})} />
+                </div>
+                <div>
+                  <label className="mb-1 block text-sm font-medium text-gray-700">Email</label>
+                  <input type="email" className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-rose-500 focus:outline-none"
+                    value={addForm.email} onChange={e => setAddForm({...addForm, email: e.target.value})} />
+                </div>
+              </div>
+            </div>
+            <div className="mt-6 flex justify-end gap-3">
+              <button 
+                onClick={() => setShowAddModal(false)}
+                className="rounded-lg px-4 py-2 text-sm font-medium text-gray-600 hover:bg-gray-100"
+              >
+                Hủy
+              </button>
+              <button 
+                disabled={!addForm.name || addLoading}
+                onClick={async () => {
+                  setAddLoading(true);
+                  try {
+                    const res = await fetch("/api/guests", {
+                      method: "POST",
+                      headers: { "Content-Type": "application/json" },
+                      body: JSON.stringify({ ...addForm, weddingId })
+                    });
+                    if (res.ok) {
+                      setShowAddModal(false);
+                      setAddForm({ name: "", familySide: "Nhà trai", groupName: "Gia đình", phone: "", email: "" });
+                      fetchGuests(1);
+                    } else {
+                      const json = await res.json();
+                      alert(json.error || "Lỗi khi thêm khách");
+                    }
+                  } finally {
+                    setAddLoading(false);
+                  }
+                }}
+                className="rounded-lg bg-rose-600 px-4 py-2 text-sm font-medium text-white hover:bg-rose-700 disabled:opacity-50"
+              >
+                {addLoading ? "Đang lưu..." : "Lưu"}
+              </button>
+            </div>
+          </div>
         </div>
       )}
     </div>

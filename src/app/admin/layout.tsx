@@ -43,6 +43,7 @@ function AdminLayoutInner({ children }: { children: React.ReactNode }) {
       { label: "Nhạc nền", href: `/admin/weddings/${weddingId}/music`, icon: "🎵" },
       { label: "Lời chúc", href: `/admin/weddings/${weddingId}/wishes`, icon: "💌" },
       { label: "Mừng cưới", href: `/admin/weddings/${weddingId}/money-gifts`, icon: "🎁" },
+      { label: "Thiết kế thiệp", href: `/admin/weddings/${weddingId}/builder`, icon: "🎨" },
       { label: "Check-in", href: `/admin/weddings/${weddingId}/checkin`, icon: "📷" },
     ];
     if (session?.user?.role !== "CLIENT") {

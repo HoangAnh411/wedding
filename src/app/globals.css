@@ -16,6 +16,18 @@
   --font-serif: var(--font-cormorant-garamond), serif;
 }
 
+.theme-modern {
+  --font-serif: var(--font-outfit), sans-serif;
+}
+
+.theme-classic {
+  --font-serif: var(--font-cormorant-garamond), serif;
+}
+
+.theme-floral {
+  --font-serif: var(--font-great-vibes), cursive;
+}
+
 body {
   background: var(--background);
   color: var(--foreground);

@@ -1,7 +1,6 @@
 import { NextRequest } from "next/server";
-import { writeFile, mkdir } from "fs/promises";
-import { join } from "path";
 import { withAuth, apiSuccess, apiError } from "@/lib/api-helper";
+import { uploadToGoogleDrive } from "@/lib/gdrive";
 
 export async function POST(req: NextRequest) {
   return withAuth(req, async () => {
@@ -24,13 +23,9 @@ export async function POST(req: NextRequest) {
       if (!ALLOWED_EXTENSIONS.includes(ext)) return apiError('Định dạng file không được hỗ trợ', 400);
 
       const filename = `${Date.now()}-${Math.random().toString(36).substring(2, 8)}.${ext}`;
-      const uploadDir = join(process.cwd(), "public", "uploads");
-      const filepath = join(uploadDir, filename);
-
-      await mkdir(uploadDir, { recursive: true });
-      await writeFile(filepath, buffer);
-
-      const url = `/uploads/${filename}`;
+      
+      // Upload trực tiếp lên Google Drive thay vì lưu local filesystem
+      const url = await uploadToGoogleDrive(buffer, filename, file.type || "application/octet-stream");
 
       return apiSuccess({ url, filename });
     } catch (err) {

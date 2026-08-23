@@ -56,7 +56,7 @@ export function getClientIp(req: Request): string {
 }
 
 export function apiError(error: unknown, status = 500): NextResponse {
-  const message = error instanceof Error ? error.message : "Internal server error";
+  const message = typeof error === 'string' ? error : (error instanceof Error ? error.message : "Internal server error");
   logger.error("[API Error]", { message });
   return NextResponse.json({ error: message }, { status });
 }

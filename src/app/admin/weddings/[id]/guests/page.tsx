@@ -9,8 +9,15 @@ export default async function GuestsPage({ params }: { params: Promise<{ id: str
 
   const { id } = await params;
 
+  // Lấy danh sách timeline events có rsvpEnabled
+  const timelineEvents = await prisma.timelineEvent.findMany({
+    where: { weddingId: id, isRsvpEnabled: true },
+    orderBy: { orderIndex: "asc" },
+  });
+
   const guests = await prisma.guest.findMany({
     where: { weddingId: id, wedding: { userId: session.user.id } },
+    include: { rsvpResponses: true },
     orderBy: { createdAt: "desc" },
   });
 
@@ -22,7 +29,16 @@ export default async function GuestsPage({ params }: { params: Promise<{ id: str
     rsvpAt: g.rsvpAt?.toISOString() || null,
     createdAt: g.createdAt.toISOString(),
     updatedAt: g.updatedAt.toISOString(),
+    rsvpResponses: g.rsvpResponses.map(r => ({
+      ...r,
+      respondedAt: r.respondedAt.toISOString()
+    }))
   }));
 
-  return <GuestsClient guests={serializedGuests} weddingId={id} />;
+  const serializedEvents = timelineEvents.map(e => ({
+    id: e.id,
+    name: e.name,
+  }));
+
+  return <GuestsClient guests={serializedGuests} timelineEvents={serializedEvents} weddingId={id} />;
 }

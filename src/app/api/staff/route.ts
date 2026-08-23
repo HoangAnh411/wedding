@@ -1,12 +1,10 @@
-import { NextResponse } from "next/server";
-import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { withAuth, apiSuccess, apiError } from "@/lib/api-helper";
 
-export async function GET() {
-  try {
-    const session = await auth();
-    if (!session?.user || session.user.role !== "SUPERADMIN") {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+export async function GET(req: Request) {
+  return withAuth(req, async (req, { role }) => {
+    if (role !== "SUPERADMIN") {
+      return apiError("Chỉ SUPERADMIN mới có quyền", 403);
     }
 
     const staff = await prisma.user.findMany({
@@ -18,25 +16,21 @@ export async function GET() {
       },
     });
 
-    return NextResponse.json(staff);
-  } catch (error) {
-    console.error("GET /api/staff error:", error);
-    return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
-  }
+    return apiSuccess(staff);
+  });
 }
 
 export async function POST(req: Request) {
-  try {
-    const session = await auth();
-    if (!session?.user || session.user.role !== "SUPERADMIN") {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  return withAuth(req, async (req, { role }) => {
+    if (role !== "SUPERADMIN") {
+      return apiError("Chỉ SUPERADMIN mới có quyền", 403);
     }
 
     const body = await req.json();
     const { name, email, password } = body;
 
     if (!name || !email || !password) {
-      return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
+      return apiError("Thiếu thông tin bắt buộc (name, email, password)", 400);
     }
 
     const existingUser = await prisma.user.findUnique({
@@ -44,10 +38,9 @@ export async function POST(req: Request) {
     });
 
     if (existingUser) {
-      return NextResponse.json({ error: "Email already exists" }, { status: 400 });
+      return apiError("Email đã tồn tại", 400);
     }
 
-    // Hash the password with bcryptjs
     const bcrypt = require("bcryptjs");
     const passwordHash = await bcrypt.hash(password, 12);
 
@@ -66,13 +59,10 @@ export async function POST(req: Request) {
       },
     });
 
-    // Send email to staff
+    // Send email to staff (non-blocking)
     const { sendStaffAccountEmail } = require("@/lib/email");
     sendStaffAccountEmail(email, password, name).catch(console.error);
 
-    return NextResponse.json(newUser, { status: 201 });
-  } catch (error) {
-    console.error("POST /api/staff error:", error);
-    return NextResponse.json({ error: "Failed to create staff" }, { status: 500 });
-  }
+    return apiSuccess(newUser);
+  });
 }
