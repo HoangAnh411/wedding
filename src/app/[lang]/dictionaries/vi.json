@@ -1,0 +1,548 @@
+{
+  "common": {
+    "login": "Đăng nhập",
+    "logout": "Đăng xuất",
+    "loading": "Đang tải...",
+    "save": "Lưu",
+    "cancel": "Huỷ",
+    "delete": "Xóa",
+    "edit": "Sửa",
+    "back": "Quay lại",
+    "tryAgain": "Thử lại",
+    "backToHome": "Về trang chủ",
+    "close": "Đóng",
+    "view": "Xem",
+    "search": "Tìm kiếm",
+    "confirm": "Xác nhận",
+    "add": "Thêm",
+    "create": "Tạo",
+    "update": "Cập nhật",
+    "submit": "Gửi",
+    "all": "Tất cả",
+    "actions": "Thao tác",
+    "status": "Trạng thái",
+    "noData": "Không có dữ liệu"
+  },
+  "metadata": {
+    "title": "Thiệp Cưới Online - Wedding Invitation",
+    "description": "Gửi thiệp cưới online và quản lý đám cưới dễ dàng"
+  },
+  "home": {
+    "nav": {
+      "guide": "Hướng dẫn",
+      "login": "Đăng nhập",
+      "createFree": "Tạo thiệp miễn phí"
+    },
+    "hero": {
+      "title": "Nền tảng tạo thiệp cưới",
+      "titleHighlight": "thông minh & hiện đại",
+      "subtitle": "Chỉ 5 phút thiết lập, sở hữu ngay website đám cưới độc quyền. Quản lý khách mời, nhận RSVP và mừng cưới qua mã QR tự động.",
+      "ctaStart": "Bắt đầu miễn phí",
+      "ctaDemo": "Xem thiệp mẫu"
+    },
+    "features": {
+      "title": "Mọi thứ bạn cần cho ngày trọng đại",
+      "subtitle": "Được thiết kế để mang lại trải nghiệm hoàn hảo cho cả cô dâu, chú rể và khách mời.",
+      "builder": {
+        "title": "Template Builder Độc Quyền",
+        "desc": "Tuỳ chỉnh màu sắc, font chữ và sắp xếp các khối thông tin linh hoạt. Hỗ trợ hiển thị mượt mà trên mọi thiết bị."
+      },
+      "guestRsvp": {
+        "title": "Quản lý Khách mời & RSVP",
+        "desc": "Theo dõi số lượng khách xác nhận tham dự. Tự động gửi email thông báo và gửi thư cảm ơn sau đám cưới."
+      },
+      "payment": {
+        "title": "Nhận Mừng Cưới Thông Minh",
+        "desc": "Tích hợp VietQR động, MoMo và PayPal. Mã QR tự động cập nhật số tiền và lời nhắn theo đúng khách mời."
+      }
+    },
+    "cta": {
+      "title": "Sẵn sàng tạo trang web đám cưới của riêng bạn?",
+      "subtitle": "Đăng ký ngay hôm nay, hoàn toàn miễn phí các tính năng cơ bản.",
+      "button": "Tạo thiệp ngay bây giờ"
+    },
+    "footer": {
+      "guideFeedback": "Hướng dẫn & Feedback"
+    }
+  },
+  "guide": {
+    "metadata": {
+      "title": "Hướng dẫn sử dụng & Feedback | WeddingApp",
+      "description": "Hướng dẫn sử dụng nền tảng tạo thiệp cưới và gửi feedback cho đội ngũ phát triển."
+    },
+    "header": {
+      "title": "Hướng dẫn sử dụng WeddingApp",
+      "subtitle": "Khám phá cách tạo và quản lý thiệp cưới trực tuyến của bạn một cách dễ dàng."
+    },
+    "sections": {
+      "account": {
+        "title": "1. Tạo tài khoản & Đăng nhập",
+        "content": "Bạn có thể đăng nhập dễ dàng qua Google hoặc Zalo. Sau khi đăng nhập, hệ thống sẽ tự động tạo một tài khoản cho bạn và chuyển hướng đến trang quản trị (Dashboard)."
+      },
+      "createWedding": {
+        "title": "2. Tạo đám cưới mới",
+        "intro": "Tại Dashboard, bấm vào nút \"Tạo thiệp mới\". Bạn cần điền các thông tin cơ bản:",
+        "items": [
+          "Tên cô dâu & chú rể",
+          "Ngày giờ tổ chức (Lễ cưới, Tiệc cưới)",
+          "Địa điểm tổ chức",
+          "Tùy chọn đường dẫn riêng (URL) cho thiệp của bạn"
+        ]
+      },
+      "guests": {
+        "title": "3. Quản lý Khách mời & RSVP",
+        "content": "Bạn có thể nhập danh sách khách mời từ file Excel hoặc thêm thủ công. Hệ thống cung cấp mã QR và link riêng cho từng khách để họ có thể xác nhận tham dự (RSVP). Bạn có thể theo dõi số lượng khách xác nhận trực tiếp trên Dashboard."
+      },
+      "design": {
+        "title": "4. Thiết kế & Tùy chỉnh thiệp",
+        "content": "Sử dụng công cụ Thiết kế thiệp để thay đổi màu sắc, font chữ (hiện tại hỗ trợ phong cách Modern, Classic, Floral) và sắp xếp các khối thông tin như Lời ngỏ, Sự kiện, Thư viện ảnh, Lời chúc."
+      },
+      "moneyGift": {
+        "title": "5. Nhận mừng cưới online",
+        "content": "Thêm thông tin tài khoản Ngân hàng (hoặc MoMo/PayPal) của bạn trong phần Cài đặt thanh toán. Hệ thống sẽ tự động tạo mã VietQR trên thiệp để khách mời có thể chuyển khoản mừng cưới dễ dàng."
+      }
+    }
+  },
+  "feedback": {
+    "formTitle": "Gửi Feedback / Báo lỗi cho Dev",
+    "name": "Tên của bạn",
+    "namePlaceholder": "Nguyễn Văn A",
+    "email": "Email (Tuỳ chọn)",
+    "emailPlaceholder": "example@gmail.com",
+    "category": "Loại Feedback",
+    "categoryOptions": {
+      "bug": "Báo lỗi (Bug)",
+      "feature": "Góp ý tính năng (Feature)",
+      "question": "Câu hỏi (Question)",
+      "other": "Khác"
+    },
+    "subject": "Tiêu đề",
+    "subjectPlaceholder": "Lỗi khi tạo thiệp...",
+    "content": "Nội dung chi tiết",
+    "contentPlaceholder": "Mô tả chi tiết vấn đề bạn gặp phải...",
+    "sending": "Đang gửi...",
+    "submit": "Gửi Feedback",
+    "successMessage": "Gửi feedback thành công! Cảm ơn đóng góp của bạn.",
+    "errorMessage": "Có lỗi xảy ra",
+    "adminTitle": "Quản lý Feedback",
+    "allStatus": "Tất cả trạng thái",
+    "statusNew": "Mới",
+    "statusReviewing": "Đang xem xét",
+    "statusReviewingShort": "Đang xem",
+    "statusResolved": "Đã xử lý",
+    "statusDismissed": "Bỏ qua",
+    "tableSender": "Người gửi",
+    "tableTypeTitle": "Loại / Tiêu đề",
+    "tableContent": "Nội dung",
+    "tableStatus": "Trạng thái",
+    "tableActions": "Thao tác",
+    "categoryBug": "Bug",
+    "categoryFeature": "Tính năng",
+    "categoryQuestion": "Câu hỏi",
+    "categoryOther": "Khác",
+    "loadError": "Lỗi khi tải danh sách feedback",
+    "updateFailed": "Cập nhật thất bại",
+    "updateSuccess": "Đã cập nhật trạng thái",
+    "noFeedback": "Không có feedback nào."
+  },
+  "admin": {
+    "sidebar": {
+      "brandName": "Wedding Admin",
+      "overview": "Tổng quan",
+      "guests": "Khách mời",
+      "tables": "Bàn tiệc",
+      "budget": "Ngân sách",
+      "checklist": "Công việc",
+      "gallery": "Thư viện ảnh",
+      "music": "Nhạc nền",
+      "wishes": "Lời chúc",
+      "moneyGifts": "Mừng cưới",
+      "builder": "Thiết kế thiệp",
+      "checkin": "Check-in",
+      "settings": "Cài đặt",
+      "myWeddings": "Đám cưới của tôi",
+      "finance": "Tài chính",
+      "vendors": "Nhà cung cấp",
+      "staff": "Nhân sự",
+      "feedback": "Feedback"
+    },
+    "login": {
+      "title": "Đăng nhập",
+      "subtitle": "Quản lý đám cưới của bạn",
+      "email": "Email",
+      "password": "Mật khẩu",
+      "loginButton": "Đăng nhập",
+      "loggingIn": "Đang đăng nhập...",
+      "errorCredentials": "Email hoặc mật khẩu không đúng",
+      "errorGeneric": "Có lỗi xảy ra, vui lòng thử lại"
+    },
+    "dashboard": {
+      "title": "Tổng quan",
+      "welcome": "Chào mừng bạn đến với Wedding Admin",
+      "guests": "Khách mời",
+      "confirmedSuffix": " đã xác nhận",
+      "confirmed": "Đã xác nhận",
+      "attendRateSuffix": "% tham dự",
+      "noData": "Chưa có dữ liệu",
+      "progress": "Tiến độ",
+      "checklist": "Checklist",
+      "noWeddings": "Chưa có đám cưới nào",
+      "createFirstWedding": "Tạo đám cưới đầu tiên để bắt đầu quản lý",
+      "createWeddingBtn": "Tạo đám cưới mới",
+      "yourWeddings": "Đám cưới của bạn",
+      "noDate": "Chưa có ngày"
+    },
+    "payments": {
+      "saveError": "Lỗi lưu cấu hình",
+      "saveSuccess": "Lưu cấu hình thành công",
+      "genericError": "Có lỗi xảy ra",
+      "title": "Cấu hình thanh toán",
+      "description": "Thiết lập tài khoản nhận tiền mừng (QR code, chuyển khoản)",
+      "bankTransfer": "Chuyển khoản ngân hàng",
+      "bankName": "Ngân hàng",
+      "bankNamePlaceholder": "VD: Vietcombank",
+      "accountNumber": "Số tài khoản",
+      "accountNumberPlaceholder": "Số tài khoản",
+      "accountName": "Tên chủ tài khoản",
+      "accountNamePlaceholder": "VD: NGUYEN VAN A",
+      "qrCodeUrl": "URL Mã QR",
+      "qrCodePlaceholder": "https://...",
+      "activateMethod": "Kích hoạt phương thức này",
+      "saving": "Đang lưu...",
+      "saveConfig": "Lưu cấu hình"
+    },
+    "settings": {
+      "updateError": "Cập nhật thất bại",
+      "updateSuccess": "Cập nhật thông tin thành công",
+      "title": "Cài đặt",
+      "description": "Cấu hình thông tin tài khoản",
+      "accountInfo": "Thông tin tài khoản",
+      "email": "Email",
+      "emailCannotChange": "Email không thể thay đổi",
+      "name": "Tên",
+      "namePlaceholder": "Your name",
+      "saving": "Đang lưu...",
+      "saveChanges": "Lưu thay đổi"
+    },
+    "staff": {
+      "genericError": "Có lỗi xảy ra",
+      "confirmDelete": "Bạn có chắc chắn muốn xóa nhân viên này?",
+      "addStaffBtn": "+ Thêm nhân viên",
+      "addStaffTitle": "Thêm nhân viên mới",
+      "name": "Tên",
+      "email": "Email",
+      "password": "Mật khẩu",
+      "saving": "Đang lưu...",
+      "save": "Lưu",
+      "cancel": "Hủy",
+      "createdAt": "Ngày tạo",
+      "actions": "Thao tác",
+      "noStaff": "Chưa có nhân viên nào.",
+      "delete": "Xóa"
+    },
+    "vendors": {
+      "confirmDelete": "Xóa nhà cung cấp này?",
+      "statusContacted": "Đã liên hệ",
+      "statusBooked": "Đã book",
+      "statusPaid": "Đã thanh toán",
+      "title": "Nhà cung cấp",
+      "description": "Quản lý các dịch vụ cho đám cưới",
+      "addVendorBtn": "+ Thêm nhà cung cấp",
+      "nameCol": "Tên",
+      "categoryCol": "Danh mục",
+      "contactCol": "Liên hệ",
+      "statusCol": "Trạng thái",
+      "contractCol": "Hợp đồng",
+      "paidCol": "Đã trả",
+      "deleteBtn": "Xóa",
+      "addVendorTitle": "Thêm nhà cung cấp",
+      "nameLabel": "Tên *",
+      "contactNamePlaceholder": "Người liên hệ",
+      "contactPhonePlaceholder": "SĐT",
+      "contractValuePlaceholder": "Giá trị hợp đồng (VNĐ)",
+      "cancelBtn": "Hủy",
+      "addingBtn": "Đang thêm...",
+      "addBtn": "Thêm"
+    },
+    "weddings": {
+      "title": "Đám cưới",
+      "subtitle": "Quản lý các đám cưới của bạn",
+      "createNew": "+ Tạo đám cưới mới",
+      "noWedding": "Chưa có đám cưới nào",
+      "noWeddingDesc": "Tạo đám cưới đầu tiên để bắt đầu quản lý",
+      "createFirst": "Tạo đám cưới mới",
+      "noDate": "Chưa có ngày",
+      "guests": "khách",
+      "createModalTitle": "Tạo đám cưới mới",
+      "createModalDesc": "Điền thông tin cơ bản để bắt đầu",
+      "groomName": "Tên chú rể *",
+      "groomPlaceholder": "Nguyễn Văn A",
+      "brideName": "Tên cô dâu *",
+      "bridePlaceholder": "Trần Thị B",
+      "weddingDate": "Ngày cưới",
+      "venueName": "Địa điểm",
+      "venuePlaceholder": "Tên nhà hàng / khách sạn",
+      "clientEmail": "Email nhận tài khoản (Tùy chọn)",
+      "clientEmailDesc": "Nếu nhập, hệ thống sẽ tự động tạo tài khoản và gửi email cho người dùng.",
+      "creating": "Đang tạo...",
+      "createButton": "Tạo đám cưới",
+      "error": "Có lỗi xảy ra"
+    },
+    "weddingDetail": {
+      "manageWedding": "Quản lý Đám cưới",
+      "noDate": "Chưa xác định",
+      "views": "lượt xem",
+      "copyLink": "Copy Link Thiệp",
+      "sendInvite": "Gửi Thiệp Mời",
+      "sending": "Đang gửi...",
+      "emailResult": "Kết quả gửi email thiệp mời:",
+      "success": "Thành công:",
+      "failed": "Thất bại:",
+      "guest": "Khách",
+      "stats": {
+        "totalGuests": "Tổng khách mời",
+        "confirmed": "Đã xác nhận",
+        "tables": "Bàn tiệc",
+        "tasks": "Công việc",
+        "gifts": "Quà mừng"
+      },
+      "quickAccess": "Truy cập nhanh",
+      "confirmSendAll": "Gửi thiệp cho tất cả khách chưa nhận thiệp?",
+      "copied": "Đã copy link!",
+      "connError": "Lỗi kết nối"
+    },
+    "budget": {
+      "title": "Ngân sách",
+      "subtitle": "Theo dõi chi phí đám cưới",
+      "addExpense": "+ Thêm khoản chi",
+      "estimated": "Dự kiến",
+      "actual": "Thực tế",
+      "paid": "Đã thanh toán",
+      "table": {
+        "item": "Khoản chi",
+        "category": "Danh mục",
+        "estimated": "Dự kiến",
+        "actual": "Thực tế",
+        "status": "TT"
+      },
+      "deleteConfirm": "Xóa?",
+      "delete": "Xóa",
+      "addModal": {
+        "title": "Thêm khoản chi",
+        "itemName": "Tên khoản chi",
+        "estimated": "Số tiền dự kiến",
+        "addButton": "Thêm"
+      }
+    },
+    "checklist": {
+      "title": "Checklist",
+      "subtitle": "Theo dõi tiến độ chuẩn bị đám cưới",
+      "addTask": "+ Thêm việc",
+      "overallProgress": "Tiến độ tổng thể",
+      "completedTasks": "việc đã hoàn thành",
+      "priority": {
+        "high": "Quan trọng",
+        "medium": "Trung bình",
+        "low": "Thấp",
+        "mediumShort": "TB"
+      },
+      "addModal": {
+        "title": "Thêm việc cần làm",
+        "taskName": "Việc cần làm",
+        "addButton": "Thêm"
+      }
+    },
+    "guests": {
+      "title": "Khách mời",
+      "subtitle": "Quản lý danh sách khách mời",
+      "importExcel": "📥 Import Excel",
+      "importing": "Đang import...",
+      "sendInvites": "✉️ Gửi Thiệp",
+      "sendThankYou": "💌 Gửi email Cảm ơn",
+      "addGuest": "+ Thêm khách",
+      "importResult": "Kết quả import:",
+      "importErrors": "lỗi",
+      "stats": {
+        "confirmed": "Đã xác nhận",
+        "pending": "Chờ xác nhận",
+        "declined": "Từ chối"
+      },
+      "searchPlaceholder": "Tìm kiếm khách mời...",
+      "filters": {
+        "all": "Tất cả",
+        "groomSide": "Nhà trai",
+        "brideSide": "Nhà gái",
+        "family": "Gia đình",
+        "friends": "Bạn bè",
+        "colleagues": "Đồng nghiệp",
+        "others": "Khác",
+        "confirmed": "Đã xác nhận",
+        "pending": "Chưa xác nhận",
+        "declined": "Từ chối",
+        "notSent": "Chưa gửi thiệp"
+      },
+      "table": {
+        "name": "Tên",
+        "side": "Phân loại",
+        "group": "Nhóm",
+        "phone": "SĐT",
+        "table": "Bàn",
+        "status": "Trạng thái",
+        "invite": "Thiệp",
+        "unclassified": "Chưa phân loại",
+        "pending": "Chờ",
+        "attending": "Đi",
+        "declined": "Từ chối",
+        "sent": "✅ Đã gửi",
+        "notSent": "⏳ Chưa gửi",
+        "notFound": "Không tìm thấy khách mời nào"
+      },
+      "pagination": {
+        "prev": "Trước",
+        "next": "Sau",
+        "page": "Trang"
+      },
+      "addModal": {
+        "title": "Thêm khách mời mới",
+        "name": "Tên khách mời *",
+        "side": "Phân loại",
+        "group": "Nhóm",
+        "phone": "Số điện thoại",
+        "email": "Email",
+        "cancel": "Hủy",
+        "saving": "Đang lưu...",
+        "save": "Lưu"
+      },
+      "alerts": {
+        "confirmSendAll": "Gửi email thiệp cưới cho tất cả khách CHƯA GỬI và có email?",
+        "sendSuccess": "Đã gửi thành công ${sent} thiệp. Thất bại: ${failed}",
+        "sendError": "Lỗi khi gửi email",
+        "confirmThankYou": "Bạn có chắc chắn muốn gửi email cảm ơn đến TẤT CẢ khách mời Đã xác nhận tham dự?",
+        "addError": "Lỗi khi thêm khách"
+      }
+    }
+  },
+  "errors": {
+    "notFoundTitle": "Không tìm thấy trang",
+    "notFoundDesc": "Trang bạn đang tìm kiếm không tồn tại, đã bị xóa hoặc URL không chính xác.",
+    "serverErrorTitle": "Đã có lỗi xảy ra",
+    "serverErrorDesc": "Chúng tôi đã gặp sự cố không mong muốn. Xin vui lòng thử lại sau."
+  },
+  "wedding": {
+    "invitation": "Thiệp cưới",
+    "invitationOf": "Thiệp cưới của {groom} & {bride}",
+    "inviteDesc": "Trân trọng kính mời quý khách đến dự lễ cưới của {groom} và {bride} {date}.",
+    "onDate": "vào ngày {date}",
+    "ceremonyTitle": "Lễ Cưới {groom} & {bride}",
+    "ceremonyDesc": "Lễ cưới của {groom} và {bride}",
+    "venue": "Việt Nam"
+  },
+  "invitation": {
+    "payment": {
+      "bankTitle": "Ngân hàng",
+      "amountLabel": "Số tiền (VNĐ)",
+      "amountPlaceholder": "VD: 500000",
+      "messageLabel": "Lời nhắn",
+      "messagePlaceholder": "VD: Chuc mung hanh phuc",
+      "weddingGift": "mung cuoi",
+      "qrAlt": "QR Mừng cưới",
+      "copied": "Đã sao chép!",
+      "copyAccount": "Copy số tài khoản",
+      "momoTitle": "MoMo",
+      "openMomo": "Mở MoMo",
+      "copyPhone": "Copy SĐT",
+      "paypalTitle": "PayPal",
+      "sendPaypal": "Gửi qua PayPal",
+      "copyEmail": "Copy email",
+      "title": "Mừng cưới",
+      "description": "Sự hiện diện của bạn là món quà quý giá nhất. Nếu có lòng, bạn có thể gửi mừng cưới qua:"
+    },
+    "hero": {
+      "inviteText": "Trân trọng kính mời:",
+      "openCard": "Mở thiệp",
+      "weddingInvitation": "Wedding Invitation",
+      "withFamily": "Cùng sự hiện diện của gia đình và bạn bè",
+      "groomFamily": "Nhà trai",
+      "brideFamily": "Nhà gái",
+      "mr": "Ông:",
+      "mrs": "Bà:",
+      "comingSoon": "Sắp diễn ra",
+      "lunarDatePrefix": "Nhằm ngày",
+      "lunarDateMiddle": "tháng",
+      "lunarDateSuffix": "năm Âm lịch",
+      "shareZalo": "Chia sẻ qua Zalo",
+      "shareFb": "Chia sẻ qua Facebook"
+    },
+    "story": {
+      "title": "Câu chuyện của chúng mình"
+    },
+    "events": {
+      "title": "Sự kiện",
+      "lunar": "âm lịch:",
+      "addToCalendar": "Thêm vào lịch"
+    },
+    "dresscode": {
+      "title": "Dress Code",
+      "subtitle": "Trang phục khuyến nghị khi tham dự",
+      "description": "Khuyến khích quý khách mặc trang phục theo tone màu Trắng, Hồng Pastel hoặc Xanh Pastel để khung hình thêm phần lung linh.",
+      "white": "Trắng",
+      "pink": "Hồng pastel",
+      "blue": "Xanh pastel"
+    },
+    "travel": {
+      "title": "Di chuyển & Lưu trú",
+      "transportTitle": "Di chuyển",
+      "transport1": "Bãi đỗ xe ô tô/xe máy miễn phí tại khuôn viên nhà hàng.",
+      "transport2": "Có hỗ trợ gọi Taxi/Grab cho khách có nhu cầu.",
+      "stayTitle": "Lưu trú",
+      "stay1": "Đối với khách ở xa, chúng tôi đã chuẩn bị phòng nghỉ tại khách sạn gần đó. Vui lòng liên hệ trước để chúng tôi sắp xếp chu đáo."
+    },
+    "faqs": {
+      "title": "Q&A",
+      "q1": "Đám cưới có tổ chức ngoài trời không?",
+      "a1": "Lễ cưới sẽ diễn ra trong hội trường có máy lạnh, không bị ảnh hưởng bởi thời tiết.",
+      "q2": "Có thể mang theo trẻ em không?",
+      "a2": "Chúng tôi rất chào đón các bé. Xin vui lòng báo số lượng trẻ em trong form RSVP để chúng tôi chuẩn bị ghế ngồi phù hợp."
+    },
+    "gallery": {
+      "title": "Album ảnh"
+    },
+    "rsvp": {
+      "title": "Xác nhận tham dự",
+      "successTitle": "Cảm ơn bạn đã xác nhận!",
+      "successDesc": "Chúng mình rất mong được đón tiếp bạn.",
+      "error": "Có lỗi xảy ra, vui lòng thử lại",
+      "name": "Họ và tên *",
+      "phone": "Số điện thoại",
+      "email": "Email (để nhận thư cảm ơn/xác nhận)",
+      "eventsPrompt": "Vui lòng chọn sự kiện bạn sẽ tham dự:",
+      "attending": "Sẽ tham dự",
+      "notAttending": "Không thể tham dự",
+      "maybeAttending": "Có thể tham dự",
+      "declined": "Xin lỗi không thể",
+      "guestCountPrefix": "Đi",
+      "guestCountSuffix": "người",
+      "guestCountFull": "Số lượng:",
+      "message": "Lời nhắn cho cô dâu chú rể...",
+      "sending": "Đang gửi...",
+      "submit": "Gửi xác nhận"
+    },
+    "wishes": {
+      "title": "Lời chúc",
+      "empty": "Chưa có lời chúc nào. Hãy là người đầu tiên!",
+      "success": "Cảm ơn! Lời chúc của bạn đã được gửi và đang chờ duyệt.",
+      "error": "Có lỗi xảy ra, vui lòng thử lại",
+      "name": "Tên của bạn *",
+      "content": "Lời chúc của bạn *",
+      "sending": "Đang gửi...",
+      "submit": "Gửi lời chúc"
+    },
+    "map": {
+      "title": "Bản đồ chỉ đường",
+      "openMap": "Mở Google Maps"
+    },
+    "footer": {
+      "thanks": "Cảm ơn bạn đã đến chia vui cùng chúng mình!"
+    }
+  }
+}

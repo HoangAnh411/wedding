@@ -450,3 +450,25 @@ model PaymentConfig {
   @@index([weddingId])
   @@map("payment_configs")
 }
+
+// ============================================================
+// Feedback / Bug Report
+// ============================================================
+model Feedback {
+  id          String   @id @default(cuid())
+  name        String
+  email       String?
+  category    String   // "bug", "feature", "question", "other"
+  subject     String
+  content     String
+  status      String   @default("new") // "new", "reviewing", "resolved", "dismissed"
+  priority    String?  @default("normal") // "low", "normal", "high", "critical"
+  adminNotes  String?  @map("admin_notes")
+  resolvedAt  DateTime? @map("resolved_at")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  @@index([status])
+  @@index([category])
+  @@map("feedbacks")
+}

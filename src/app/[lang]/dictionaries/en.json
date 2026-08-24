@@ -1,0 +1,548 @@
+{
+  "common": {
+    "login": "Login",
+    "logout": "Logout",
+    "loading": "Loading...",
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "back": "Back",
+    "tryAgain": "Try again",
+    "backToHome": "Back to home",
+    "close": "Close",
+    "view": "View",
+    "search": "Search",
+    "confirm": "Confirm",
+    "add": "Add",
+    "create": "Create",
+    "update": "Update",
+    "submit": "Submit",
+    "all": "All",
+    "actions": "Actions",
+    "status": "Status",
+    "noData": "No data"
+  },
+  "metadata": {
+    "title": "Online Wedding Invitation",
+    "description": "Create online wedding invitations and manage your wedding easily"
+  },
+  "home": {
+    "nav": {
+      "guide": "Guide",
+      "login": "Login",
+      "createFree": "Create for free"
+    },
+    "hero": {
+      "title": "The wedding invitation platform that is",
+      "titleHighlight": "smart & modern",
+      "subtitle": "Set up in just 5 minutes and get your exclusive wedding website. Manage guests, receive RSVPs, and collect wedding gifts via auto-generated QR codes.",
+      "ctaStart": "Get started for free",
+      "ctaDemo": "View sample invitation"
+    },
+    "features": {
+      "title": "Everything you need for your big day",
+      "subtitle": "Designed to deliver a perfect experience for both the couple and their guests.",
+      "builder": {
+        "title": "Exclusive Template Builder",
+        "desc": "Customize colors, fonts, and arrange content blocks flexibly. Beautifully responsive on all devices."
+      },
+      "guestRsvp": {
+        "title": "Guest Management & RSVP",
+        "desc": "Track confirmed guests in real-time. Automatically send email notifications and thank-you notes after the wedding."
+      },
+      "payment": {
+        "title": "Smart Wedding Gift Collection",
+        "desc": "Integrated with VietQR, MoMo, and PayPal. QR codes auto-update amounts and messages per guest."
+      }
+    },
+    "cta": {
+      "title": "Ready to create your own wedding website?",
+      "subtitle": "Sign up today — basic features are completely free.",
+      "button": "Create your invitation now"
+    },
+    "footer": {
+      "guideFeedback": "Guide & Feedback"
+    }
+  },
+  "guide": {
+    "metadata": {
+      "title": "User Guide & Feedback | WeddingApp",
+      "description": "Learn how to use the wedding invitation platform and send feedback to the development team."
+    },
+    "header": {
+      "title": "WeddingApp User Guide",
+      "subtitle": "Discover how to create and manage your online wedding invitation with ease."
+    },
+    "sections": {
+      "account": {
+        "title": "1. Create an Account & Login",
+        "content": "You can easily log in via Google or Zalo. After logging in, the system will automatically create an account for you and redirect you to the Dashboard."
+      },
+      "createWedding": {
+        "title": "2. Create a New Wedding",
+        "intro": "On the Dashboard, click the \"Create New Invitation\" button. You need to fill in the basic information:",
+        "items": [
+          "Bride & Groom names",
+          "Date & time (Ceremony, Reception)",
+          "Venue location",
+          "Custom URL for your invitation"
+        ]
+      },
+      "guests": {
+        "title": "3. Guest Management & RSVP",
+        "content": "You can import your guest list from an Excel file or add guests manually. The system provides unique QR codes and links for each guest so they can confirm their attendance (RSVP). You can track confirmed guests directly on the Dashboard."
+      },
+      "design": {
+        "title": "4. Design & Customize Your Invitation",
+        "content": "Use the Invitation Designer tool to change colors, fonts (currently supporting Modern, Classic, and Floral styles), and arrange content blocks like Introduction, Events, Gallery, and Wishes."
+      },
+      "moneyGift": {
+        "title": "5. Receive Wedding Gifts Online",
+        "content": "Add your bank account (or MoMo/PayPal) information in the Payment Settings. The system will automatically generate VietQR codes on your invitation so guests can easily transfer wedding gifts."
+      }
+    }
+  },
+  "feedback": {
+    "formTitle": "Send Feedback / Report a Bug",
+    "name": "Your name",
+    "namePlaceholder": "John Doe",
+    "email": "Email (Optional)",
+    "emailPlaceholder": "example@gmail.com",
+    "category": "Feedback Type",
+    "categoryOptions": {
+      "bug": "Bug Report",
+      "feature": "Feature Request",
+      "question": "Question",
+      "other": "Other"
+    },
+    "subject": "Subject",
+    "subjectPlaceholder": "Error when creating invitation...",
+    "content": "Detailed description",
+    "contentPlaceholder": "Describe the issue you encountered in detail...",
+    "sending": "Sending...",
+    "submit": "Send Feedback",
+    "successMessage": "Feedback sent successfully! Thank you for your contribution.",
+    "errorMessage": "An error occurred",
+    "adminTitle": "Manage Feedback",
+    "allStatus": "All statuses",
+    "statusNew": "New",
+    "statusReviewing": "Reviewing",
+    "statusReviewingShort": "Reviewing",
+    "statusResolved": "Resolved",
+    "statusDismissed": "Dismissed",
+    "tableSender": "Sender",
+    "tableTypeTitle": "Type / Subject",
+    "tableContent": "Content",
+    "tableStatus": "Status",
+    "tableActions": "Actions",
+    "categoryBug": "Bug",
+    "categoryFeature": "Feature",
+    "categoryQuestion": "Question",
+    "categoryOther": "Other",
+    "loadError": "Failed to load feedback list",
+    "updateFailed": "Update failed",
+    "updateSuccess": "Status updated",
+    "noFeedback": "No feedback found."
+  },
+  "admin": {
+    "sidebar": {
+      "brandName": "Wedding Admin",
+      "overview": "Overview",
+      "guests": "Guests",
+      "tables": "Tables",
+      "budget": "Budget",
+      "checklist": "Checklist",
+      "gallery": "Gallery",
+      "music": "Music",
+      "wishes": "Wishes",
+      "moneyGifts": "Gifts",
+      "builder": "Designer",
+      "checkin": "Check-in",
+      "settings": "Settings",
+      "myWeddings": "My Weddings",
+      "finance": "Finance",
+      "vendors": "Vendors",
+      "staff": "Staff",
+      "feedback": "Feedback"
+    },
+    "login": {
+      "title": "Login",
+      "subtitle": "Manage your wedding",
+      "email": "Email",
+      "password": "Password",
+      "loginButton": "Login",
+      "loggingIn": "Logging in...",
+      "errorCredentials": "Invalid email or password",
+      "errorGeneric": "An error occurred, please try again"
+    },
+    "dashboard": {
+      "title": "Overview",
+      "welcome": "Welcome to Wedding Admin",
+      "guests": "Guests",
+      "confirmedSuffix": " confirmed",
+      "confirmed": "Confirmed",
+      "attendRateSuffix": "% attending",
+      "noData": "No data",
+      "progress": "Progress",
+      "checklist": "Checklist",
+      "noWeddings": "No weddings yet",
+      "createFirstWedding": "Create your first wedding to start managing",
+      "createWeddingBtn": "Create new wedding",
+      "yourWeddings": "Your weddings",
+      "noDate": "No date yet"
+    },
+    "payments": {
+      "saveError": "Error saving config",
+      "saveSuccess": "Configuration saved successfully",
+      "genericError": "An error occurred",
+      "title": "Payment Configuration",
+      "description": "Set up accounts to receive gifts (QR code, bank transfer)",
+      "bankTransfer": "Bank Transfer",
+      "bankName": "Bank",
+      "bankNamePlaceholder": "Ex: Vietcombank",
+      "accountNumber": "Account Number",
+      "accountNumberPlaceholder": "Account Number",
+      "accountName": "Account Holder Name",
+      "accountNamePlaceholder": "Ex: JOHN DOE",
+      "qrCodeUrl": "QR Code URL",
+      "qrCodePlaceholder": "https://...",
+      "activateMethod": "Activate this method",
+      "saving": "Saving...",
+      "saveConfig": "Save configuration"
+    },
+    "settings": {
+      "updateError": "Failed to update profile",
+      "updateSuccess": "Profile updated successfully",
+      "title": "Settings",
+      "description": "Account configuration",
+      "accountInfo": "Account Information",
+      "email": "Email",
+      "emailCannotChange": "Email cannot be changed",
+      "name": "Name",
+      "namePlaceholder": "Your name",
+      "saving": "Saving...",
+      "saveChanges": "Save changes"
+    },
+    "staff": {
+      "genericError": "An error occurred",
+      "confirmDelete": "Are you sure you want to delete this staff member?",
+      "addStaffBtn": "+ Add Staff",
+      "addStaffTitle": "Add New Staff",
+      "name": "Name",
+      "email": "Email",
+      "password": "Password",
+      "saving": "Saving...",
+      "save": "Save",
+      "cancel": "Cancel",
+      "createdAt": "Created At",
+      "actions": "Actions",
+      "noStaff": "No staff members yet.",
+      "delete": "Delete"
+    },
+    "vendors": {
+      "confirmDelete": "Delete this vendor?",
+      "statusContacted": "Contacted",
+      "statusBooked": "Booked",
+      "statusPaid": "Paid",
+      "title": "Vendors",
+      "description": "Manage wedding services",
+      "addVendorBtn": "+ Add Vendor",
+      "nameCol": "Name",
+      "categoryCol": "Category",
+      "contactCol": "Contact",
+      "statusCol": "Status",
+      "contractCol": "Contract",
+      "paidCol": "Paid",
+      "deleteBtn": "Delete",
+      "addVendorTitle": "Add Vendor",
+      "nameLabel": "Name *",
+      "contactNamePlaceholder": "Contact Name",
+      "contactPhonePlaceholder": "Phone Number",
+      "contractValuePlaceholder": "Contract Value (VND)",
+      "cancelBtn": "Cancel",
+      "addingBtn": "Adding...",
+      "addBtn": "Add"
+    },
+    "weddings": {
+      "title": "Weddings",
+      "subtitle": "Manage your weddings",
+      "createNew": "+ Create new wedding",
+      "noWedding": "No weddings yet",
+      "noWeddingDesc": "Create your first wedding to start managing",
+      "createFirst": "Create new wedding",
+      "noDate": "No date set",
+      "guests": "guests",
+      "createModalTitle": "Create new wedding",
+      "createModalDesc": "Fill in the basic info to start",
+      "groomName": "Groom's name *",
+      "groomPlaceholder": "John Doe",
+      "brideName": "Bride's name *",
+      "bridePlaceholder": "Jane Doe",
+      "weddingDate": "Wedding date",
+      "venueName": "Venue",
+      "venuePlaceholder": "Restaurant / Hotel name",
+      "clientEmail": "Account email (Optional)",
+      "clientEmailDesc": "If entered, the system will auto-create an account and email the user.",
+      "creating": "Creating...",
+      "createButton": "Create wedding",
+      "error": "An error occurred"
+    },
+    "weddingDetail": {
+      "manageWedding": "Manage Wedding",
+      "noDate": "Not set",
+      "views": "views",
+      "copyLink": "Copy Invite Link",
+      "sendInvite": "Send Invites",
+      "sending": "Sending...",
+      "emailResult": "Email invite results:",
+      "success": "Success:",
+      "failed": "Failed:",
+      "guest": "Guest",
+      "stats": {
+        "totalGuests": "Total guests",
+        "confirmed": "Confirmed",
+        "tables": "Tables",
+        "tasks": "Tasks",
+        "gifts": "Gifts"
+      },
+      "quickAccess": "Quick Access",
+      "confirmSendAll": "Send invite to all guests who haven't received one?",
+      "copied": "Link copied!",
+      "connError": "Connection error"
+    },
+    "budget": {
+      "title": "Budget",
+      "subtitle": "Track wedding expenses",
+      "addExpense": "+ Add expense",
+      "estimated": "Estimated",
+      "actual": "Actual",
+      "paid": "Paid",
+      "table": {
+        "item": "Item",
+        "category": "Category",
+        "estimated": "Estimated",
+        "actual": "Actual",
+        "status": "Status"
+      },
+      "deleteConfirm": "Delete?",
+      "delete": "Delete",
+      "addModal": {
+        "title": "Add expense",
+        "itemName": "Item name",
+        "estimated": "Estimated amount",
+        "addButton": "Add"
+      }
+    },
+    "checklist": {
+      "title": "Checklist",
+      "subtitle": "Track wedding preparation progress",
+      "addTask": "+ Add task",
+      "overallProgress": "Overall progress",
+      "completedTasks": "tasks completed",
+      "priority": {
+        "high": "High",
+        "medium": "Medium",
+        "low": "Low",
+        "mediumShort": "Med"
+      },
+      "addModal": {
+        "title": "Add task",
+        "taskName": "Task name",
+        "addButton": "Add"
+      }
+    },
+    "guests": {
+      "title": "Guests",
+      "subtitle": "Manage guest list",
+      "importExcel": "📥 Import Excel",
+      "importing": "Importing...",
+      "sendInvites": "✉️ Send Invites",
+      "sendThankYou": "💌 Send Thank You",
+      "addGuest": "+ Add guest",
+      "importResult": "Import result:",
+      "importErrors": "errors",
+      "stats": {
+        "confirmed": "Confirmed",
+        "pending": "Pending",
+        "declined": "Declined"
+      },
+      "searchPlaceholder": "Search guests...",
+      "filters": {
+        "all": "All",
+        "groomSide": "Groom's side",
+        "brideSide": "Bride's side",
+        "family": "Family",
+        "friends": "Friends",
+        "colleagues": "Colleagues",
+        "others": "Others",
+        "confirmed": "Confirmed",
+        "pending": "Pending",
+        "declined": "Declined",
+        "notSent": "Not sent"
+      },
+      "table": {
+        "name": "Name",
+        "side": "Side",
+        "group": "Group",
+        "phone": "Phone",
+        "table": "Table",
+        "status": "Status",
+        "invite": "Invite",
+        "unclassified": "Unclassified",
+        "pending": "Pending",
+        "attending": "Attending",
+        "declined": "Declined",
+        "sent": "✅ Sent",
+        "notSent": "⏳ Not sent",
+        "notFound": "No guests found"
+      },
+      "pagination": {
+        "prev": "Prev",
+        "next": "Next",
+        "page": "Page"
+      },
+      "addModal": {
+        "title": "Add new guest",
+        "name": "Guest name *",
+        "side": "Side",
+        "group": "Group",
+        "phone": "Phone number",
+        "email": "Email",
+        "cancel": "Cancel",
+        "saving": "Saving...",
+        "save": "Save"
+      },
+      "alerts": {
+        "confirmSendAll": "Send wedding invites to all UNSENT guests with email?",
+        "sendSuccess": "Successfully sent ${sent} invites. Failed: ${failed}",
+        "sendError": "Error sending emails",
+        "confirmThankYou": "Are you sure you want to send thank you emails to ALL confirmed guests?",
+        "addError": "Error adding guest"
+      }
+    }
+  },
+  "errors": {
+    "notFoundTitle": "Page not found",
+    "notFoundDesc": "The page you are looking for does not exist, has been removed, or the URL is incorrect.",
+    "serverErrorTitle": "Something went wrong",
+    "serverErrorDesc": "We encountered an unexpected error. Please try again later."
+  },
+  "wedding": {
+    "invitation": "Wedding Invitation",
+    "invitationOf": "Wedding Invitation of {groom} & {bride}",
+    "inviteDesc": "You are cordially invited to the wedding of {groom} and {bride} {date}.",
+    "onDate": "on {date}",
+    "ceremonyTitle": "Wedding of {groom} & {bride}",
+    "ceremonyDesc": "The wedding of {groom} and {bride}",
+    "venue": "Vietnam"
+  },
+  "invitation": {
+    "payment": {
+      "bankTitle": "Bank",
+      "amountLabel": "Amount (VND)",
+      "amountPlaceholder": "Ex: 500000",
+      "messageLabel": "Message",
+      "messagePlaceholder": "Ex: Happy Wedding",
+      "weddingGift": "wedding gift",
+      "qrAlt": "Wedding Gift QR",
+      "copied": "Copied!",
+      "copyAccount": "Copy account number",
+      "momoTitle": "MoMo",
+      "openMomo": "Open MoMo",
+      "copyPhone": "Copy phone number",
+      "paypalTitle": "PayPal",
+      "sendPaypal": "Send via PayPal",
+      "copyEmail": "Copy email",
+      "title": "Wedding Gift",
+      "description": "Your presence is our greatest gift. If you wish, you can send a wedding gift via:"
+    },
+    "hero": {
+      "inviteText": "Cordially invited:",
+      "openCard": "Open Invitation",
+      "weddingInvitation": "Wedding Invitation",
+      "withFamily": "Together with their families and friends",
+      "groomFamily": "Groom's Family",
+      "brideFamily": "Bride's Family",
+      "mr": "Mr.",
+      "mrs": "Mrs.",
+      "comingSoon": "Coming soon",
+      "lunarDatePrefix": "On",
+      "lunarDateMiddle": "of",
+      "lunarDateSuffix": "Lunar Calendar",
+      "shareZalo": "Share via Zalo",
+      "shareFb": "Share via Facebook"
+    },
+    "story": {
+      "title": "Our Story"
+    },
+    "events": {
+      "title": "Events",
+      "lunar": "lunar:",
+      "addToCalendar": "Add to Calendar"
+    },
+    "dresscode": {
+      "title": "Dress Code",
+      "subtitle": "Recommended attire",
+      "description": "We encourage guests to wear White, Pastel Pink, or Pastel Blue to make the photos more sparkling.",
+      "white": "White",
+      "pink": "Pastel Pink",
+      "blue": "Pastel Blue"
+    },
+    "travel": {
+      "title": "Travel & Stay",
+      "transportTitle": "Transportation",
+      "transport1": "Free car/motorbike parking at the venue.",
+      "transport2": "We can help call Taxi/Grab for guests who need it.",
+      "stayTitle": "Accommodation",
+      "stay1": "For guests from far away, we have prepared rooms at a nearby hotel. Please contact us in advance to arrange."
+    },
+    "faqs": {
+      "title": "Q&A",
+      "q1": "Will the wedding be outdoors?",
+      "a1": "The wedding will take place in an air-conditioned hall, unaffected by the weather.",
+      "q2": "Can I bring children?",
+      "a2": "We warmly welcome children. Please indicate the number of children in the RSVP form so we can prepare suitable seating."
+    },
+    "gallery": {
+      "title": "Gallery"
+    },
+    "rsvp": {
+      "title": "RSVP",
+      "successTitle": "Thank you for confirming!",
+      "successDesc": "We look forward to seeing you.",
+      "error": "An error occurred, please try again",
+      "name": "Full Name *",
+      "phone": "Phone Number",
+      "email": "Email (for thank you/confirmation)",
+      "eventsPrompt": "Please select the events you will attend:",
+      "attending": "Will attend",
+      "notAttending": "Cannot attend",
+      "maybeAttending": "Maybe",
+      "declined": "Sorry, I cannot",
+      "guestCountPrefix": "With",
+      "guestCountSuffix": "people",
+      "guestCountFull": "Quantity:",
+      "message": "Message for the couple...",
+      "sending": "Sending...",
+      "submit": "Send RSVP"
+    },
+    "wishes": {
+      "title": "Wishes",
+      "empty": "No wishes yet. Be the first to send one!",
+      "success": "Thank you! Your wish has been sent and is pending approval.",
+      "error": "An error occurred, please try again",
+      "name": "Your Name *",
+      "content": "Your Wish *",
+      "sending": "Sending...",
+      "submit": "Send Wish"
+    },
+    "map": {
+      "title": "Map & Directions",
+      "openMap": "Open Google Maps"
+    },
+    "footer": {
+      "thanks": "Thank you for coming to celebrate with us!"
+    }
+  }
+}

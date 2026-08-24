@@ -14,26 +14,26 @@ export const loginSchema = z.object({
 export const weddingSchema = z.object({
   groomName: z.string().min(1, "Tên chú rể là bắt buộc"),
   brideName: z.string().min(1, "Tên cô dâu là bắt buộc"),
-  slug: z.string().optional(),
-  weddingDate: z.string().optional(),
-  engagementDate: z.string().optional(),
-  ceremonyDate: z.string().optional(),
-  receptionDate: z.string().optional(),
-  story: z.string().optional(),
-  venueName: z.string().optional(),
-  venueAddress: z.string().optional(),
+  slug: z.preprocess((v) => v === "" ? null : v, z.string().nullable().optional()),
+  weddingDate: z.preprocess((v) => v === "" ? null : v, z.string().nullable().optional()),
+  engagementDate: z.preprocess((v) => v === "" ? null : v, z.string().nullable().optional()),
+  ceremonyDate: z.preprocess((v) => v === "" ? null : v, z.string().nullable().optional()),
+  receptionDate: z.preprocess((v) => v === "" ? null : v, z.string().nullable().optional()),
+  story: z.preprocess((v) => v === "" ? null : v, z.string().nullable().optional()),
+  venueName: z.preprocess((v) => v === "" ? null : v, z.string().nullable().optional()),
+  venueAddress: z.preprocess((v) => v === "" ? null : v, z.string().nullable().optional()),
   venueLat: z.number().optional(),
   venueLng: z.number().optional(),
-  coverImage: z.string().optional(),
+  coverImage: z.preprocess((v) => v === "" ? null : v, z.string().nullable().optional()),
   galleryEnabled: z.boolean().optional(),
   musicEnabled: z.boolean().optional(),
   rsvpEnabled: z.boolean().optional(),
   wishesEnabled: z.boolean().optional(),
   isTemplate: z.boolean().optional(),
   clientEmail: z.string().email("Email không hợp lệ").optional().or(z.literal("")),
-  password: z.string().optional().nullable(),
-  theme: z.string().optional(),
-  primaryColor: z.string().optional(),
+  password: z.preprocess((v) => v === "" ? null : v, z.string().nullable().optional()).nullable(),
+  theme: z.preprocess((v) => v === "" ? null : v, z.string().nullable().optional()),
+  primaryColor: z.preprocess((v) => v === "" ? null : v, z.string().nullable().optional()),
   layoutConfig: z.any().optional(),
 });
 
@@ -42,18 +42,18 @@ export const weddingSchema = z.object({
 // ============================================================
 export const guestSchema = z.object({
   weddingId: z.string().min(1),
-  familySide: z.string().optional(),
+  familySide: z.preprocess((v) => v === "" ? null : v, z.string().nullable().optional()),
   name: z.string().min(1, "Tên khách mời là bắt buộc"),
-  phone: z.string().optional(),
+  phone: z.preprocess((v) => v === "" ? null : v, z.string().nullable().optional()),
   email: z.string().email("Email không hợp lệ").optional().or(z.literal("")),
-  groupName: z.string().optional(),
-  inviteCode: z.string().optional(),
-  tableNumber: z.number().int().optional().nullable(),
-  isAttending: z.boolean().optional().nullable(),
+  groupName: z.preprocess((v) => v === "" ? null : v, z.string().nullable().optional()),
+  inviteCode: z.preprocess((v) => v === "" ? null : v, z.string().nullable().optional()),
+  tableNumber: z.preprocess((v) => v === "" ? null : v, z.number().int().nullable().optional()),
+  isAttending: z.preprocess((v) => v === "" ? null : v, z.boolean().nullable().optional()),
   plusOne: z.boolean().optional(),
-  plusOneName: z.string().optional(),
-  mealChoice: z.string().optional(),
-  dietaryRestrictions: z.string().optional(),
+  plusOneName: z.preprocess((v) => v === "" ? null : v, z.string().nullable().optional()),
+  mealChoice: z.preprocess((v) => v === "" ? null : v, z.string().nullable().optional()),
+  dietaryRestrictions: z.preprocess((v) => v === "" ? null : v, z.string().nullable().optional()),
 });
 
 export const guestImportSchema = z.array(guestSchema);
@@ -66,9 +66,9 @@ export const rsvpSchema = z.object({
   guestId: z.string().min(1),
   isAttending: z.boolean(),
   guestCount: z.number().int().min(1).max(10),
-  mealChoice: z.string().optional(),
-  dietaryRestrictions: z.string().optional(),
-  message: z.string().optional(),
+  mealChoice: z.preprocess((v) => v === "" ? null : v, z.string().nullable().optional()),
+  dietaryRestrictions: z.preprocess((v) => v === "" ? null : v, z.string().nullable().optional()),
+  message: z.preprocess((v) => v === "" ? null : v, z.string().nullable().optional()),
 });
 
 // ============================================================
@@ -77,7 +77,7 @@ export const rsvpSchema = z.object({
 export const wishSchema = z.object({
   weddingId: z.string().min(1),
   guestName: z.string().min(1, "Tên là bắt buộc"),
-  phone: z.string().optional(),
+  phone: z.preprocess((v) => v === "" ? null : v, z.string().nullable().optional()),
   content: z.string().min(1, "Lời chúc là bắt buộc").max(500, "Lời chúc không quá 500 ký tự"),
 });
 
@@ -92,17 +92,17 @@ export const wishApprovalSchema = z.object({
 export const vendorSchema = z.object({
   name: z.string().min(1, "Tên nhà cung cấp là bắt buộc"),
   category: z.string().min(1),
-  contactName: z.string().optional(),
-  contactPhone: z.string().optional(),
-  contactEmail: z.string().optional(),
-  address: z.string().optional(),
-  website: z.string().optional(),
-  serviceDescription: z.string().optional(),
-  contractValue: z.number().optional().nullable(),
-  paidAmount: z.number().optional().nullable(),
+  contactName: z.preprocess((v) => v === "" ? null : v, z.string().nullable().optional()),
+  contactPhone: z.preprocess((v) => v === "" ? null : v, z.string().nullable().optional()),
+  contactEmail: z.preprocess((v) => v === "" ? null : v, z.string().nullable().optional()),
+  address: z.preprocess((v) => v === "" ? null : v, z.string().nullable().optional()),
+  website: z.preprocess((v) => v === "" ? null : v, z.string().nullable().optional()),
+  serviceDescription: z.preprocess((v) => v === "" ? null : v, z.string().nullable().optional()),
+  contractValue: z.preprocess((v) => v === "" ? null : v, z.number().nullable().optional()),
+  paidAmount: z.preprocess((v) => v === "" ? null : v, z.number().nullable().optional()),
   status: z.enum(["contacted", "booked", "paid"]).optional(),
-  notes: z.string().optional(),
-  reminderDate: z.string().optional(),
+  notes: z.preprocess((v) => v === "" ? null : v, z.string().nullable().optional()),
+  reminderDate: z.preprocess((v) => v === "" ? null : v, z.string().nullable().optional()),
 });
 
 // ============================================================
@@ -112,13 +112,13 @@ export const budgetItemSchema = z.object({
   weddingId: z.string().min(1),
   category: z.string().min(1),
   itemName: z.string().min(1, "Tên khoản chi là bắt buộc"),
-  estimatedCost: z.number().optional().nullable(),
-  actualCost: z.number().optional().nullable(),
-  vendorId: z.string().optional().nullable(),
+  estimatedCost: z.preprocess((v) => v === "" ? null : v, z.number().nullable().optional()),
+  actualCost: z.preprocess((v) => v === "" ? null : v, z.number().nullable().optional()),
+  vendorId: z.preprocess((v) => v === "" ? null : v, z.string().nullable().optional()).nullable(),
   isPaid: z.boolean().optional(),
-  paidDate: z.string().optional(),
-  paymentMethod: z.string().optional(),
-  notes: z.string().optional(),
+  paidDate: z.preprocess((v) => v === "" ? null : v, z.string().nullable().optional()),
+  paymentMethod: z.preprocess((v) => v === "" ? null : v, z.string().nullable().optional()),
+  notes: z.preprocess((v) => v === "" ? null : v, z.string().nullable().optional()),
 });
 
 // ============================================================
@@ -127,14 +127,14 @@ export const budgetItemSchema = z.object({
 export const checklistItemSchema = z.object({
   weddingId: z.string().min(1),
   title: z.string().min(1, "Tiêu đề là bắt buộc"),
-  category: z.string().optional(),
-  phase: z.string().optional(),
-  dueDate: z.string().optional(),
-  dueRelativeDays: z.number().int().optional().nullable(),
+  category: z.preprocess((v) => v === "" ? null : v, z.string().nullable().optional()),
+  phase: z.preprocess((v) => v === "" ? null : v, z.string().nullable().optional()),
+  dueDate: z.preprocess((v) => v === "" ? null : v, z.string().nullable().optional()),
+  dueRelativeDays: z.preprocess((v) => v === "" ? null : v, z.number().int().nullable().optional()),
   isCompleted: z.boolean().optional(),
-  assignedTo: z.string().optional(),
+  assignedTo: z.preprocess((v) => v === "" ? null : v, z.string().nullable().optional()),
   priority: z.enum(["low", "medium", "high"]).optional(),
-  notes: z.string().optional(),
+  notes: z.preprocess((v) => v === "" ? null : v, z.string().nullable().optional()),
 });
 
 // ============================================================
@@ -143,9 +143,9 @@ export const checklistItemSchema = z.object({
 export const tableSchema = z.object({
   weddingId: z.string().min(1),
   tableNumber: z.number().int().min(1),
-  tableName: z.string().optional(),
+  tableName: z.preprocess((v) => v === "" ? null : v, z.string().nullable().optional()),
   capacity: z.number().int().min(1).default(10),
-  locationDescription: z.string().optional(),
+  locationDescription: z.preprocess((v) => v === "" ? null : v, z.string().nullable().optional()),
   isHeadTable: z.boolean().optional(),
 });
 
@@ -155,12 +155,12 @@ export const tableSchema = z.object({
 export const moneyGiftSchema = z.object({
   weddingId: z.string().min(1),
   guestName: z.string().min(1, "Tên khách là bắt buộc"),
-  phone: z.string().optional(),
+  phone: z.preprocess((v) => v === "" ? null : v, z.string().nullable().optional()),
   amount: z.number().positive("Số tiền phải lớn hơn 0"),
-  paymentMethod: z.string().optional(),
-  bankName: z.string().optional(),
-  transactionId: z.string().optional(),
-  receivedAt: z.string().optional(),
+  paymentMethod: z.preprocess((v) => v === "" ? null : v, z.string().nullable().optional()),
+  bankName: z.preprocess((v) => v === "" ? null : v, z.string().nullable().optional()),
+  transactionId: z.preprocess((v) => v === "" ? null : v, z.string().nullable().optional()),
+  receivedAt: z.preprocess((v) => v === "" ? null : v, z.string().nullable().optional()),
   isConfirmed: z.boolean().optional(),
 });
 
@@ -170,9 +170,9 @@ export const moneyGiftSchema = z.object({
 export const galleryImageSchema = z.object({
   weddingId: z.string().min(1),
   imageUrl: z.string().min(1),
-  caption: z.string().optional(),
+  caption: z.preprocess((v) => v === "" ? null : v, z.string().nullable().optional()),
   isVideo: z.boolean().optional(),
-  videoUrl: z.string().optional(),
+  videoUrl: z.preprocess((v) => v === "" ? null : v, z.string().nullable().optional()),
   orderIndex: z.number().int().optional(),
 });
 
@@ -182,9 +182,9 @@ export const galleryImageSchema = z.object({
 export const musicTrackSchema = z.object({
   weddingId: z.string().min(1),
   title: z.string().min(1),
-  artist: z.string().optional(),
+  artist: z.preprocess((v) => v === "" ? null : v, z.string().nullable().optional()),
   url: z.string().min(1, "URL nhạc là bắt buộc"),
-  coverUrl: z.string().optional(),
+  coverUrl: z.preprocess((v) => v === "" ? null : v, z.string().nullable().optional()),
   isDefault: z.boolean().optional(),
 });
 
@@ -194,8 +194,8 @@ export const musicTrackSchema = z.object({
 export const checkInSchema = z.object({
   guestId: z.string().min(1),
   weddingId: z.string().min(1),
-  checkInBy: z.string().optional(),
-  notes: z.string().optional(),
+  checkInBy: z.preprocess((v) => v === "" ? null : v, z.string().nullable().optional()),
+  notes: z.preprocess((v) => v === "" ? null : v, z.string().nullable().optional()),
 });
 
 // ============================================================
@@ -204,11 +204,11 @@ export const checkInSchema = z.object({
 export const emailSchema = z.object({
   to: z.string().email("Email không hợp lệ"),
   guestName: z.string().min(1),
-  groomName: z.string().optional(),
-  brideName: z.string().optional(),
-  weddingDate: z.string().optional(),
-  venueName: z.string().optional(),
-  venueAddress: z.string().optional(),
+  groomName: z.preprocess((v) => v === "" ? null : v, z.string().nullable().optional()),
+  brideName: z.preprocess((v) => v === "" ? null : v, z.string().nullable().optional()),
+  weddingDate: z.preprocess((v) => v === "" ? null : v, z.string().nullable().optional()),
+  venueName: z.preprocess((v) => v === "" ? null : v, z.string().nullable().optional()),
+  venueAddress: z.preprocess((v) => v === "" ? null : v, z.string().nullable().optional()),
   invitationUrl: z.string().url("URL không hợp lệ"),
 });
 

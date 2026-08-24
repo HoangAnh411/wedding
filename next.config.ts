@@ -17,7 +17,7 @@ const nextConfig: NextConfig = {
   redirects: async () => [
     {
       source: "/demo",
-      destination: "/minh-linh",
+      destination: "/vi/minh-linh",
       permanent: false,
     },
   ],
