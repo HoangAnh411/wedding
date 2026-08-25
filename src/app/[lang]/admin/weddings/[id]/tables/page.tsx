@@ -1,4 +1,4 @@
-import { prisma } from "@/lib/prisma";
+﻿import { prisma } from "@/lib/prisma";
 import { auth } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import TablesClient from "./tables-client";
@@ -21,11 +21,13 @@ export default async function TablesPage({ params }: { params: Promise<{ id: str
     select: { id: true, name: true, tableNumber: true },
   });
 
+  const unassignedGuests = guests.filter(g => g.tableNumber === null).map(g => ({ id: g.id, name: g.name }));
+  
   const serialized = tables.map((t) => ({
     ...t,
     createdAt: t.createdAt.toISOString(),
-    guests: guests.filter((g) => g.tableNumber === t.tableNumber).map((g) => g.name),
+    guests: guests.filter((g) => g.tableNumber === t.tableNumber).map((g) => ({ id: g.id, name: g.name })),
   }));
 
-  return <TablesClient tables={serialized} weddingId={id} />;
+  return <TablesClient tables={serialized} unassignedGuests={unassignedGuests} weddingId={id} />;
 }
