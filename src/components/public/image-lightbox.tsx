@@ -71,29 +71,30 @@ export function ImageLightbox({
 
   return (
     <>
-      <div className="mt-8 grid gap-4 sm:grid-cols-3">
+      <div className="mt-8 columns-1 gap-4 sm:columns-2 md:columns-3 lg:columns-3 space-y-4">
         {images.map((img, i) => (
           <button
             key={img.id}
             onClick={() => setCurrent(i)}
-            className="group relative aspect-square overflow-hidden rounded-xl bg-gradient-to-br from-rose-100 to-pink-100"
+            className="group relative w-full overflow-hidden rounded-xl bg-gradient-to-br from-rose-100 to-pink-100 mb-4 inline-block break-inside-avoid"
           >
             {img.imageUrl ? (
               <Image
                 src={img.imageUrl}
                 alt={img.caption || ""}
-                fill
+                width={800}
+                height={1200}
                 sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                className="object-cover transition-transform duration-500 group-hover:scale-110"
+                className="w-full h-auto object-cover transition-transform duration-700 group-hover:scale-105"
               />
             ) : (
-              <div className="flex h-full items-center justify-center">
+              <div className="flex h-64 w-full items-center justify-center">
                 <span className="text-4xl">📸</span>
               </div>
             )}
             {img.caption && (
-              <div className="absolute inset-0 flex items-end bg-gradient-to-t from-black/50 p-3 opacity-0 transition group-hover:opacity-100">
-                <p className="text-sm text-white">{img.caption}</p>
+              <div className="absolute inset-0 flex items-end bg-gradient-to-t from-black/60 via-black/0 p-4 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+                <p className="text-sm font-medium text-white">{img.caption}</p>
               </div>
             )}
           </button>

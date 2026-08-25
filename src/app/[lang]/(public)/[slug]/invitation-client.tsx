@@ -747,7 +747,7 @@ export default function InvitationClient({ wedding, guestInfo }: { wedding: Wedd
           <p className="mt-6 font-serif text-xl font-medium text-foreground">{wedding.venueName}</p>
           {wedding.venueAddress && <p className="mt-2 text-sm text-foreground/70">{wedding.venueAddress}</p>}
           
-          <div className="mt-10 overflow-hidden rounded-2xl shadow-lg border border-primary/20 aspect-video w-full max-w-3xl mx-auto">
+          <div className="mt-10 overflow-hidden rounded-2xl shadow-lg border border-primary/20 aspect-video w-full max-w-3xl mx-auto bg-gray-50 flex items-center justify-center">
             <iframe 
               width="100%" 
               height="100%" 
@@ -755,8 +755,8 @@ export default function InvitationClient({ wedding, guestInfo }: { wedding: Wedd
               style={{ border: 0 }} 
               referrerPolicy="no-referrer-when-downgrade"
               src={wedding.venueLat && wedding.venueLng
-                ? `https://maps.google.com/maps?q=${wedding.venueLat},${wedding.venueLng}&output=embed`
-                : `https://maps.google.com/maps?q=${encodeURIComponent(wedding.venueAddress || wedding.venueName || '')}&output=embed`
+                ? `https://maps.google.com/maps?q=${wedding.venueLat},${wedding.venueLng}&t=&z=15&ie=UTF8&iwloc=&output=embed`
+                : `https://maps.google.com/maps?q=${encodeURIComponent(wedding.venueAddress || wedding.venueName || '')}&t=&z=15&ie=UTF8&iwloc=&output=embed`
               }
               allowFullScreen
             ></iframe>

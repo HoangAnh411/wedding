@@ -4,8 +4,10 @@ import { useTranslation } from "@/components/i18n-provider";
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import dynamic from "next/dynamic";
 
-import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from "recharts";
+import { Pie, Cell, Tooltip, ResponsiveContainer } from "recharts";
+const PieChart = dynamic(() => import("recharts").then(mod => mod.PieChart), { ssr: false });
 
 interface WeddingSummary {
   id: string;
@@ -91,7 +93,7 @@ export default function DashboardClient({ weddings, stats, userRole }: Dashboard
         
         <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
           <h2 className="text-lg font-semibold text-gray-900 mb-4">Tỷ lệ RSVP</h2>
-          <div className="h-48">
+          <div className="h-64">
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
                 <Pie
