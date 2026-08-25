@@ -128,12 +128,14 @@ export default function SettingsClient({
             label="Nhạc nền"
             description="Tự động phát nhạc nền khi khách xem thiệp"
           />
-          <Switch
-            checked={wedding.isTemplate}
-            onChange={(val) => toggleSetting("isTemplate", val)}
-            label="Làm Template"
-            description="Lưu đám cưới này thành giao diện mẫu"
-          />
+          {userRole === "SUPERADMIN" && (
+            <Switch
+              checked={wedding.isTemplate}
+              onChange={(val) => toggleSetting("isTemplate", val)}
+              label="Làm Template"
+              description="Lưu đám cưới này thành giao diện mẫu"
+            />
+          )}
         </div>
       </div>
 

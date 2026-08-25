@@ -83,6 +83,10 @@ export async function POST(request: NextRequest) {
         }
         return rsvpResponses;
       } else {
+        await tx.rsvpResponse.deleteMany({
+          where: { guestId: guest.id, eventId: null }
+        });
+
         const newRsvp = await tx.rsvpResponse.create({
           data: {
             guestId: guest.id,

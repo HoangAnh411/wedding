@@ -7,8 +7,20 @@ export default async function DashboardPage() {
   const session = await auth();
   if (!session?.user) redirect("/admin/login");
 
+  const role = session.user.role;
+  const userId = session.user.id;
+
+  let whereClause = {};
+  if (role === "SUPERADMIN") {
+    whereClause = {};
+  } else if (role === "STAFF") {
+    whereClause = { assignments: { some: { staffId: userId } } };
+  } else {
+    whereClause = { clientId: userId };
+  }
+
   const weddings = await prisma.wedding.findMany({
-    where: { userId: session.user.id },
+    where: whereClause,
     include: {
       _count: { select: { guests: true, checklistItems: true } },
     },
@@ -18,7 +30,7 @@ export default async function DashboardPage() {
 
   const confirmedGuests = await prisma.guest.count({
     where: {
-      wedding: { userId: session.user.id },
+      wedding: whereClause,
       isAttending: true,
     },
   });
@@ -26,7 +38,7 @@ export default async function DashboardPage() {
   const totalChecklist = weddings.reduce((sum, w) => sum + w._count.checklistItems, 0);
   const completedChecklist = await prisma.checklistItem.count({
     where: {
-      wedding: { userId: session.user.id },
+      wedding: whereClause,
       isCompleted: true,
     },
   });
@@ -50,6 +62,7 @@ export default async function DashboardPage() {
         confirmedGuests,
         progress,
       }}
+      userRole={role}
     />
   );
 }

@@ -26,8 +26,9 @@ const greatVibes = Great_Vibes({
 });
 
 export const metadata: Metadata = {
-  title: "Thiệp Cưới Online - Wedding Invitation",
-  description: "Gửi thiệp cưới online và quản lý đám cưới dễ dàng",
+  title: "WeddingApp - Nền tảng tạo thiệp cưới",
+  description: "Tạo thiệp cưới online đẹp và quản lý khách mời dễ dàng",
+  manifest: "/manifest.json",
 };
 
 export async function generateStaticParams() {

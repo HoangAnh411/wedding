@@ -9,34 +9,19 @@ import { SectionHeader } from "@/components/ui/section-header";
 import { PasswordGate } from "@/components/public/password-gate";
 import { SolarDate } from "@nghiavuive/lunar_date_vi";
 
+import { motion } from "framer-motion";
+
 function FadeIn({ children, delay = 0, className = "" }: { children: React.ReactNode; delay?: number; className?: string }) {
-  const [isVisible, setIsVisible] = useState(false);
-  const domRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(entries => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          setIsVisible(true);
-        }
-      });
-    }, { threshold: 0.1, rootMargin: "0px 0px -50px 0px" });
-    
-    const currentRef = domRef.current;
-    if (currentRef) observer.observe(currentRef);
-    return () => {
-      if (currentRef) observer.unobserve(currentRef);
-    };
-  }, []);
-
   return (
-    <div
-      ref={domRef}
-      className={`transition-all duration-1000 ease-out ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'} ${className}`}
-      style={{ transitionDelay: `${delay}ms` }}
+    <motion.div
+      initial={{ opacity: 0, y: 50 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-50px" }}
+      transition={{ duration: 0.8, delay: delay / 1000, ease: "easeOut" }}
+      className={className}
     >
       {children}
-    </div>
+    </motion.div>
   );
 }
 
@@ -118,11 +103,17 @@ const PaymentSection = ({ configs, guestName }: { configs: WeddingData['paymentC
   const [amounts, setAmounts] = useState<Record<string, string>>({});
   const [messages, setMessages] = useState<Record<string, string>>({});
 
+  const removeVietnameseTones = (str: string) => {
+    return str.normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/đ/g, 'd').replace(/Đ/g, 'D');
+  };
+
   const generateVietQR = (p: WeddingData['paymentConfigs'][0]) => {
     if (!p.bankName || !p.accountNumber) return p.qrCodeUrl;
     let bankCode = p.bankName.split('-')[0].trim().replace(/\s/g, ''); 
     const amount = amounts[p.id] ? `&amount=${amounts[p.id]}` : '';
-    const addInfo = messages[p.id] ? `&addInfo=${encodeURIComponent(messages[p.id])}` : (guestName ? `&addInfo=${encodeURIComponent(guestName + ` ${dict.invitation.payment.weddingGift}`)}` : '');
+    const rawMessage = messages[p.id] !== undefined ? messages[p.id] : (guestName ? (guestName + ` ${dict.invitation.payment.weddingGift}`) : '');
+    const cleanMessage = removeVietnameseTones(rawMessage);
+    const addInfo = cleanMessage ? `&addInfo=${encodeURIComponent(cleanMessage)}` : '';
     const accountName = p.accountName ? `&accountName=${encodeURIComponent(p.accountName)}` : '';
     return `https://img.vietqr.io/image/${bankCode}-${p.accountNumber}-compact2.png?${amount}${addInfo}${accountName}`;
   };
@@ -751,10 +742,26 @@ export default function InvitationClient({ wedding, guestInfo }: { wedding: Wedd
 
     map: wedding.venueName && (
       <section key="map" className="bg-primary/5 py-24">
-        <FadeIn className="mx-auto max-w-2xl px-4 text-center">
+        <FadeIn className="mx-auto max-w-4xl px-4 text-center">
           <SectionHeader title={dict.invitation.map.title} />
           <p className="mt-6 font-serif text-xl font-medium text-foreground">{wedding.venueName}</p>
           {wedding.venueAddress && <p className="mt-2 text-sm text-foreground/70">{wedding.venueAddress}</p>}
+          
+          <div className="mt-10 overflow-hidden rounded-2xl shadow-lg border border-primary/20 aspect-video w-full max-w-3xl mx-auto">
+            <iframe 
+              width="100%" 
+              height="100%" 
+              frameBorder="0" 
+              style={{ border: 0 }} 
+              referrerPolicy="no-referrer-when-downgrade"
+              src={wedding.venueLat && wedding.venueLng
+                ? `https://maps.google.com/maps?q=${wedding.venueLat},${wedding.venueLng}&output=embed`
+                : `https://maps.google.com/maps?q=${encodeURIComponent(wedding.venueAddress || wedding.venueName || '')}&output=embed`
+              }
+              allowFullScreen
+            ></iframe>
+          </div>
+
           <div className="mt-8 flex justify-center gap-4">
             <a
               href={wedding.venueLat && wedding.venueLng

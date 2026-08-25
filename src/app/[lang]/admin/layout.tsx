@@ -49,10 +49,8 @@ function AdminLayoutInner({ children }: { children: React.ReactNode }) {
       { label: dict.admin.sidebar.moneyGifts, href: `/${lang}/admin/weddings/${weddingId}/money-gifts`, icon: "🎁" },
       { label: dict.admin.sidebar.builder, href: `/${lang}/admin/weddings/${weddingId}/builder`, icon: "🎨" },
       { label: dict.admin.sidebar.checkin, href: `/${lang}/admin/weddings/${weddingId}/checkin`, icon: "📷" },
+      { label: dict.admin.sidebar.settings, href: `/${lang}/admin/weddings/${weddingId}/settings`, icon: "⚙️" },
     ];
-    if (session?.user?.role !== "CLIENT") {
-      navItems.push({ label: dict.admin.sidebar.settings, href: `/${lang}/admin/weddings/${weddingId}/settings`, icon: "⚙️" });
-    }
   } else {
     navItems = [
       { label: dict.admin.sidebar.myWeddings, href: `/${lang}/admin`, icon: "💒" },
@@ -129,15 +127,23 @@ function AdminLayoutInner({ children }: { children: React.ReactNode }) {
           <div className="flex items-center gap-4 ml-auto">
             <LanguageSwitcher />
             <span className="text-sm text-gray-500">{session?.user?.name || "Admin"}</span>
+            <Link
+              href={`/${lang}/admin/profile`}
+              className="text-sm text-gray-400 hover:text-gray-600 font-medium"
+            >
+              Hồ sơ
+            </Link>
             <button
               onClick={() => signOut({ callbackUrl: `/${lang}/admin/login` })}
               className="text-sm text-gray-400 hover:text-gray-600"
             >
               {dict.common.logout}
             </button>
-            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-rose-100 text-sm font-medium text-rose-600">
-              {session?.user?.name?.[0] || "A"}
-            </div>
+            <Link href={`/${lang}/admin/profile`}>
+              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-rose-100 text-sm font-medium text-rose-600 hover:bg-rose-200 cursor-pointer">
+                {session?.user?.name?.[0] || "A"}
+              </div>
+            </Link>
           </div>
         </header>
 

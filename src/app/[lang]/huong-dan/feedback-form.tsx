@@ -47,8 +47,14 @@ export function FeedbackForm({ dict }: { dict: Record<string, any> }) {
     <form onSubmit={handleSubmit} className="space-y-4 rounded-xl border border-gray-100 bg-white p-6 shadow-sm">
       <h3 className="text-xl font-bold text-gray-900 mb-4">{dict.formTitle}</h3>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <Input name="name" label={dict.name} required placeholder={dict.namePlaceholder} />
-        <Input name="email" label={dict.email} type="email" placeholder={dict.emailPlaceholder} />
+        <div className="space-y-1">
+          <label className="block text-sm font-medium text-gray-700">{dict.name}</label>
+          <Input name="name" required placeholder={dict.namePlaceholder} />
+        </div>
+        <div className="space-y-1">
+          <label className="block text-sm font-medium text-gray-700">{dict.email}</label>
+          <Input name="email" type="email" placeholder={dict.emailPlaceholder} />
+        </div>
       </div>
       <div className="space-y-1">
         <label className="block text-sm font-medium text-gray-700">{dict.category}</label>
@@ -59,7 +65,10 @@ export function FeedbackForm({ dict }: { dict: Record<string, any> }) {
           <option value="other">{dict.categoryOptions.other}</option>
         </select>
       </div>
-      <Input name="subject" label={dict.subject} required placeholder={dict.subjectPlaceholder} />
+      <div className="space-y-1">
+        <label className="block text-sm font-medium text-gray-700">{dict.subject}</label>
+        <Input name="subject" required placeholder={dict.subjectPlaceholder} />
+      </div>
       <div className="space-y-1">
         <label className="block text-sm font-medium text-gray-700">{dict.content}</label>
         <textarea
